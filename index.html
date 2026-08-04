@@ -59,6 +59,7 @@ h1,h2,h3,.display{font-family:'Baloo 2',sans-serif;font-weight:800;letter-spacin
 @media(min-width:660px){.duo{grid-template-columns:1fr 1fr;align-items:start}}
 svg.odo{display:block;width:100%;height:auto}
 img.gambargigi{display:block;width:100%;max-width:420px;height:auto;margin:0 auto 8px}
+img.judul{display:block;width:100%;max-width:430px;height:auto;margin:0 auto}
 .odo-cap{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   color:var(--navy-soft);text-align:center;margin:2px 0 6px}
 .odo-ax{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;fill:var(--navy-soft);letter-spacing:.08em}
@@ -145,6 +146,7 @@ ul.clean li{margin-bottom:4px;font-size:14px}
   .page:last-of-type{break-after:auto;page-break-after:auto}
   .duo{grid-template-columns:1fr 1fr}
   svg.odo{max-width:86mm;margin:0 auto}
+  img.judul{max-width:112mm}
   .page{padding-top:2mm}
   .tm,.act,.tip,.kondisi,.tipbox,.prod{break-inside:avoid;page-break-inside:avoid}
 }
@@ -169,8 +171,9 @@ ul.clean li{margin-bottom:4px;font-size:14px}
   <div class="page">
     <div class="brand">Medikids</div>
     <div class="ttl">
-      <div class="goodjob">GOOD JOB!</div>
-      <div class="big">Rapor Gigi</div>
+      <img class="judul hide" id="gambarJudul" alt="Rapor Gigi — Good Job!">
+      <div class="goodjob" id="ttlBadge">GOOD JOB!</div>
+      <div class="big" id="ttlTeks">Rapor Gigi</div>
     </div>
 
     <div class="idt" id="idt"></div>
@@ -278,25 +281,30 @@ ul.clean li{margin-bottom:4px;font-size:14px}
 const CONFIG = {
 
   // 1) WAJIB DIISI — URL Web App Apps Script, sama dengan yang di input.html
-  API_URL: "https://script.google.com/macros/s/AKfycbzghbgg_XvRfHlmaP2hzEAZrsGYedidoyu3qjvE_X8khk6FtSvcXnqDrTy8CTA-s4kdUQ/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbwf2seE9OdI09XQeB0VB3W52bxGxM65LA8Af-CkObBga2Y78PCX5s1Ra89L6b2pwSV6xA/exec",
 
   // 2) Nomor WhatsApp CRO untuk tombol "Tanya klinik". Format 62...
   //    Kosongkan ("") kalau tombolnya mau disembunyikan.
   WA_CRO: "",
 
-  // 3) Gambar gigi (odontogram) yang ditampilkan ke orang tua.
+  // 3) Gambar judul di paling atas halaman rapor (menggantikan tulisan
+  //    "GOOD JOB! / RAPOR GIGI"). Upload filenya ke repo, tulis namanya di sini.
+  //    Kosongkan ("") kalau mau kembali ke tulisan biasa.
+  GAMBAR_JUDUL: "Judul Rapor Gigi.png",
+
+  // 4) Gambar gigi (odontogram) yang ditampilkan ke orang tua.
   //    Upload file gambarnya ke repo GitHub yang sama, lalu tulis nama filenya
   //    di sini, contoh: "odontogram.png"
   //    Boleh juga link penuh: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/Gambar Rapor Gigi.png"
   //    Kosongkan ("") kalau belum ada gambarnya.
   GAMBAR_GIGI: "Gambar Rapor Gigi.png",
 
-  // 4) Peta gigi berwarna (gambar yang dibuat otomatis, gigi bermasalah
+  // 5) Peta gigi berwarna (gambar yang dibuat otomatis, gigi bermasalah
   //    diberi warna). Sekarang dimatikan, jadi yang tampil hanya gambar
   //    di atas. Ubah ke true kalau nanti mau dipakai lagi.
   PETA_WARNA: false,
 
-  // 5) Link video edukasi (opsional). Kosongkan kalau belum ada —
+  // 6) Link video edukasi (opsional). Kosongkan kalau belum ada —
   //    tulisan "Tonton video edukasi" otomatis disembunyikan.
   VIDEO: {
     tambal:  "",
@@ -502,6 +510,18 @@ function render(d){
     img.src=LOGO_MEDIKIDS; img.alt="Medikids";
     b.textContent=""; b.appendChild(img);
   });
+
+  /* ---- gambar judul di paling atas ---- */
+  if(CONFIG.GAMBAR_JUDUL){
+    const jd=$("#gambarJudul");
+    // tulisan hanya disembunyikan kalau gambarnya benar-benar berhasil dimuat
+    jd.addEventListener("load",()=>{
+      jd.classList.remove("hide");
+      $("#ttlBadge").classList.add("hide");
+      $("#ttlTeks").classList.add("hide");
+    });
+    jd.src=CONFIG.GAMBAR_JUDUL.replace(/ /g,"%20");
+  }
 
   /* ---- gambar gigi dari file (kalau disediakan) ---- */
   if(CONFIG.GAMBAR_GIGI){
