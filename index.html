@@ -22,6 +22,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:#F0E6DE;color:var(--navy);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
   font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
   font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
 h1,h2,h3,.display{font-family:'Baloo 2',sans-serif;font-weight:800;letter-spacing:-.005em;margin:0}
@@ -36,8 +37,9 @@ h1,h2,h3,.display{font-family:'Baloo 2',sans-serif;font-weight:800;letter-spacin
 .ttl .big{font-size:30px;color:var(--red);line-height:1.05;text-transform:uppercase}
 .ttl .big.sm{font-size:25px}
 .ttl .sub{font-size:13px;color:var(--navy-soft);font-weight:600;margin-top:2px}
-.brand{position:absolute;top:22px;right:26px;font-family:'Baloo 2',sans-serif;font-weight:800;
-  font-size:15px;color:var(--red)}
+.brand{position:absolute;top:20px;right:26px;font-family:'Baloo 2',sans-serif;font-weight:800;
+  font-size:15px;color:var(--red);line-height:1}
+.brand img{display:block;height:30px;width:auto}
 .goodjob{display:inline-block;background:var(--yellow);color:var(--navy);font-family:'Baloo 2',sans-serif;
   font-weight:800;font-size:12px;padding:4px 13px;border-radius:999px;margin-bottom:6px;letter-spacing:.04em}
 
@@ -135,7 +137,8 @@ ul.clean li{margin-bottom:4px;font-size:14px}
 /* ---------- cetak / simpan PDF ---------- */
 @page{size:A4;margin:12mm 10mm}
 @media print{
-  body{background:#fff}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .brand img{height:26px}
   .tools,.foot,.tips-print{display:none !important}
   .page{box-shadow:none;border-radius:0;margin:0;padding:0 0 8mm;max-width:none;
         break-after:page;page-break-after:always}
@@ -275,7 +278,7 @@ ul.clean li{margin-bottom:4px;font-size:14px}
 const CONFIG = {
 
   // 1) WAJIB DIISI — URL Web App Apps Script, sama dengan yang di input.html
-  API_URL: "https://script.google.com/macros/s/AKfycbzWn-Koev1HAh1D_S20dStGqSfIwbCLF1cfZk_0ZN6iaSUDGeW5l-KsoQfXpR3IN5OD1g/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbwf2seE9OdI09XQeB0VB3W52bxGxM65LA8Af-CkObBga2Y78PCX5s1Ra89L6b2pwSV6xA/exec",
 
   // 2) Nomor WhatsApp CRO untuk tombol "Tanya klinik". Format 62...
   //    Kosongkan ("") kalau tombolnya mau disembunyikan.
@@ -289,9 +292,9 @@ const CONFIG = {
   GAMBAR_GIGI: "Gambar Rapor Gigi.png",
 
   // 4) Peta gigi berwarna (gambar yang dibuat otomatis, gigi bermasalah
-  //    diberi warna). Biarkan true supaya orang tua tahu gigi mana yang
-  //    dimaksud. Ubah ke false kalau mau pakai gambar di atas saja.
-  PETA_WARNA: true,
+  //    diberi warna). Sekarang dimatikan, jadi yang tampil hanya gambar
+  //    di atas. Ubah ke true kalau nanti mau dipakai lagi.
+  PETA_WARNA: false,
 
   // 5) Link video edukasi (opsional). Kosongkan kalau belum ada —
   //    tulisan "Tonton video edukasi" otomatis disembunyikan.
@@ -309,6 +312,10 @@ const CONFIG = {
    ====================================================================== */
 
 const $ = (s,r=document)=>r.querySelector(s);
+
+/* Logo Medikids sudah ditanam di dalam file ini, jadi tidak perlu
+   upload file logo terpisah ke GitHub. */
+const LOGO_MEDIKIDS = "data:image/png;base64,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";
 const NS = "http://www.w3.org/2000/svg";
 
 const PENJELASAN = {
@@ -488,6 +495,13 @@ function render(d){
   kb.appendChild(el("div","v", kondisi||"Hasil Pemeriksaan"));
   const jelas = ada(d["Penjelasan_Hidden"]) ? d["Penjelasan_Hidden"] : PENJELASAN[kondisi];
   if(jelas) kb.appendChild(el("div","t",jelas));
+
+  /* ---- logo Medikids ---- */
+  document.querySelectorAll(".brand").forEach(b=>{
+    const img=document.createElement("img");
+    img.src=LOGO_MEDIKIDS; img.alt="Medikids";
+    b.textContent=""; b.appendChild(img);
+  });
 
   /* ---- gambar gigi dari file (kalau disediakan) ---- */
   if(CONFIG.GAMBAR_GIGI){
