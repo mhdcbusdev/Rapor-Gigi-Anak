@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Form Rapor Gigi Anak — Medikids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E43127; --red-dark:#B7241C; --red-soft:#FFEDE9;
+  --navy:#1D3A63; --navy-soft:#5C7395;
+  --cream:#FFF6EF; --card:#fff;
+  --mint:#17B3A3; --yellow:#FFC72C;
+  --line:#F2DFD4; --line-strong:#E4C7B8;
+  --shadow:0 1px 2px rgba(29,58,99,.05), 0 8px 24px -12px rgba(29,58,99,.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--cream);color:var(--navy);
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2{font-family:'Baloo 2',sans-serif;font-weight:800;letter-spacing:-.01em;margin:0}
+
+.topbar{position:sticky;top:0;z-index:30;background:var(--red);color:#fff;padding:14px 18px;
+  box-shadow:0 6px 18px -10px rgba(180,36,28,.7)}
+.topbar-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar h1{font-size:22px;line-height:1.1}
+.topbar .sub{font-size:12.5px;opacity:.9;font-weight:500}
+.badge{margin-left:auto;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+  padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 150px}
+.notice{background:#FFF3D6;border:1px solid var(--yellow);border-left:5px solid var(--yellow);
+  border-radius:10px;padding:13px 15px;font-size:13.5px;margin-bottom:18px}
+.notice.err{background:#FFE9E7;border-color:var(--red);border-left-color:var(--red)}
+.notice code{background:rgba(29,58,99,.08);padding:1px 5px;border-radius:4px;font-size:12.5px}
+
+section.card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);padding:20px;margin-bottom:16px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.sec-num{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;color:var(--red);
+  background:var(--red-soft);border-radius:8px;min-width:26px;height:26px;display:grid;place-items:center;flex:none}
+.sec-head h2{font-size:19px}
+.sec-desc{font-size:13px;color:var(--navy-soft);margin:0 0 16px 36px}
+
+.grid{display:grid;gap:14px}
+@media(min-width:720px){.grid.two{grid-template-columns:1fr 1fr}}
+
+.f{display:flex;flex-direction:column;gap:6px}
+.f.span{grid-column:1/-1}
+label,.lbl{font-size:13px;font-weight:600}
+.req::after{content:" *";color:var(--red)}
+.hint{font-size:12px;color:var(--navy-soft);font-weight:500}
+input[type=text],input[type=tel],input[type=email],input[type=date],select,textarea{
+  width:100%;padding:11px 12px;font:inherit;font-size:14.5px;color:var(--navy);background:#FFFDFB;
+  border:1.5px solid var(--line-strong);border-radius:10px;transition:border-color .15s, box-shadow .15s}
+textarea{min-height:82px;resize:vertical}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235C7395' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,49,39,.14)}
+input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
+.err-msg{font-size:12px;color:var(--red-dark);font-weight:600;display:none}
+.err-msg.show{display:block}
+
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line-strong);border-radius:10px;
+  padding:10px 12px;cursor:pointer;background:#FFFDFB;font-size:14px;line-height:1.4;transition:.15s}
+.opt:hover{border-color:var(--navy-soft)}
+.opt input{margin:2px 0 0;accent-color:var(--red);width:17px;height:17px;flex:none}
+.opt.on{border-color:var(--red);background:var(--red-soft)}
+
+.gigipick{border:1.5px solid #DCE8F5;background:#FBFDFF;border-radius:12px;padding:8px 12px;margin-top:2px}
+.gp-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:7px 0}
+.gp-row + .gp-row{border-top:1px solid #EAF1F9}
+.gp-lbl{font-size:11px;font-weight:700;color:var(--navy-soft);min-width:106px;flex:none;
+  text-transform:uppercase;letter-spacing:.04em;line-height:1.35}
+.gp-lbl b{display:block;color:var(--navy);font-size:12.5px;letter-spacing:0}
+.gp-btns{display:flex;gap:4px;flex-wrap:wrap}
+.gt{width:34px;height:31px;flex:none;border:1.5px solid #B6C9DE;background:#fff;color:var(--navy);
+  border-radius:8px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;padding:0;transition:.12s}
+.gt:hover{border-color:var(--red);color:var(--red)}
+.gt.on{background:var(--red);border-color:var(--red);color:#fff}
+@media(max-width:560px){
+  .gp-lbl{min-width:100%;padding-bottom:2px}
+  .gp-lbl b{display:inline;margin-left:4px}
+  .gt{width:32px;height:30px;font-size:12px}
+}
+
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.quick button{border:1px solid var(--line-strong);background:#fff;color:var(--navy);font:inherit;font-size:12px;
+  font-weight:600;padding:5px 10px;border-radius:999px;cursor:pointer}
+.quick button:hover{border-color:var(--mint);color:var(--mint)}
+
+.linkbox{grid-column:1/-1;background:#F2FBFA;border:1px solid #B9E7E1;border-radius:10px;
+  padding:11px 13px;font-size:12.5px;word-break:break-all}
+.linkbox .t{font-weight:700;color:var(--mint);display:block;margin-bottom:3px;font-size:11.5px;
+  letter-spacing:.04em;text-transform:uppercase}
+
+.sub-blok{border:1.5px solid var(--line-strong);border-radius:12px;padding:14px;background:#FFFDFB}
+.sub-judul{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--red);margin-bottom:12px}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,246,239,.94);
+  backdrop-filter:blur(8px);border-top:1px solid var(--line-strong);padding:12px 16px}
+.bar-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.bar .status{font-size:12.5px;color:var(--navy-soft);font-weight:500;flex:1}
+.btn{font:inherit;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:11px;
+  padding:13px 26px;cursor:pointer;transition:.15s}
+.btn.primary{background:var(--red);color:#fff;box-shadow:0 6px 16px -8px rgba(228,49,39,.9)}
+.btn.primary:hover{background:var(--red-dark)}
+.btn.primary:disabled{background:#D9C7BE;box-shadow:none;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line-strong);font-size:14px;padding:11px 18px}
+
+.overlay{position:fixed;inset:0;z-index:60;background:var(--cream);display:grid;place-items:center;padding:24px}
+.overlay .box{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+  padding:28px;max-width:400px;width:100%;text-align:center}
+.overlay h2{font-size:22px;margin-bottom:6px}
+.overlay p{font-size:13.5px;color:var(--navy-soft);margin:0 0 18px}
+.tick{width:62px;height:62px;margin:0 auto 14px;border-radius:50%;background:#E8F8F6;color:var(--mint);
+  display:grid;place-items:center;font-size:32px}
+.recap{text-align:left;background:#FFFDFB;border:1px solid var(--line);border-radius:10px;padding:12px;
+  font-size:13px;margin-bottom:16px}
+.recap div{display:flex;gap:8px;padding:2px 0}
+.recap span:first-child{color:var(--navy-soft);min-width:92px;flex:none}
+.hide{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="overlay hide" id="done">
+  <div class="box">
+    <div class="tick">&#10003;</div>
+    <h2>Rapor terkirim</h2>
+    <p>Data masuk Google Sheet, dan WhatsApp otomatis dikirim ke nomor orang tua serta nomor klinik.</p>
+    <div class="recap" id="recap"></div>
+    <button class="btn primary" style="width:100%" id="nextPatient">Isi pasien berikutnya</button>
+    <button class="btn ghost" style="width:100%;margin-top:8px" id="resetAll">Mulai dari kosong</button>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>Rapor Gigi Anak</h1>
+      <div class="sub">Form input dokter &amp; perawat — Medikids</div>
+    </div>
+    <div class="badge">Form sementara</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="notice err hide" id="cfgWarn">
+    <b>Belum bisa kirim.</b> <code>API_URL</code> di dalam file ini masih kosong.
+    Buka file <code>input.html</code>, cari <code>const CONFIG</code>, lalu tempel URL Web App Apps Script
+    (<code>https://script.google.com/macros/s/.../exec</code>).
+  </div>
+
+  <form id="form" novalidate>
+
+    <!-- ============ 1. PASIEN ============ -->
+    <section class="card">
+      <div class="sec-head"><div class="sec-num">1</div><h2>Data pasien</h2></div>
+      <p class="sec-desc">Nomor HP orang tua dipakai untuk mengirim link rapor via WhatsApp.</p>
+      <div class="grid two">
+        <div class="f span">
+          <label class="req" for="nama">Nama pasien</label>
+          <input type="text" id="nama" data-key="Nama Pasien" data-req placeholder="Nama lengkap anak">
+          <div class="err-msg">Wajib diisi.</div>
+        </div>
+        <div class="f">
+          <label class="req" for="hp">No HP orang tua</label>
+          <input type="tel" id="hp" data-key="No HP" data-req inputmode="numeric" placeholder="0812xxxxxxx">
+          <div class="hint" id="hpPrev">Akan dikirim ke: —</div>
+          <div class="err-msg">Nomor HP wajib diisi.</div>
+        </div>
+        <div class="f">
+          <label for="email">Email orang tua <span class="hint">(opsional)</span></label>
+          <input type="email" id="email" data-key="Email" placeholder="nama@email.com">
+        </div>
+        <div class="f">
+          <label class="req" for="lahir">Tanggal lahir pasien</label>
+          <input type="date" id="lahir" data-key="Tanggal Lahir Pasien" data-req>
+          <div class="hint" id="usiaPrev">Usia: —</div>
+          <div class="err-msg">Wajib diisi.</div>
+        </div>
+        <div class="f">
+          <label class="req" for="periksa">Tanggal pemeriksaan</label>
+          <input type="date" id="periksa" data-key="Tanggal Pemeriksaan" data-req>
+          <div class="err-msg">Wajib diisi.</div>
+        </div>
+        <div class="f">
+          <label class="req" for="cabang">Klinik cabang</label>
+          <select id="cabang" data-key="Klinik Cabang" data-req></select>
+          <div class="hint" id="cabangPrev">No WA klinik: —</div>
+          <div class="err-msg">Pilih cabang.</div>
+        </div>
+        <div class="f">
+          <label class="req" for="kategori">Kategori kunjungan</label>
+          <select id="kategori" data-key="Kategori" data-req>
+            <option value="">— pilih —</option>
+            <option>First Dental Visit</option>
+            <option>Field Trip</option>
+            <option>IBK</option>
+          </select>
+          <div class="hint">First Dental Visit &amp; Field Trip ikut dapat pesan promo. IBK tanpa promo.</div>
+          <div class="err-msg">Pilih kategori.</div>
+        </div>
+        <div class="f">
+          <label class="req" for="dokter">Nama dokter pemeriksa</label>
+          <input type="text" id="dokter" data-key="Nama Dokter" data-req placeholder="drg Nama Dokter">
+          <div class="err-msg">Wajib diisi.</div>
+        </div>
+        <div class="linkbox">
+          <span class="t">Link rapor yang akan dikirim ke orang tua</span>
+          <span id="linkPrev">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. HASIL PEMERIKSAAN ============ -->
+    <section class="card">
+      <div class="sec-head"><div class="sec-num">2</div><h2>Hasil pemeriksaan</h2></div>
+      <p class="sec-desc">Klik nomor giginya. Klik sekali lagi untuk membatalkan. Bisa juga diketik langsung di kolomnya.</p>
+      <div class="grid two">
+        <div class="f span" data-gigi="Gigi Berlubang" data-label="Gigi berlubang"></div>
+        <div class="f span" data-gigi="Sisa Akar" data-label="Sisa akar"></div>
+        <div class="f span" data-gigi="Gigi Perlu Dicabut" data-label="Gigi perlu dicabut"></div>
+
+        <div class="f span">
+          <span class="lbl req">Kondisi gigi secara umum</span>
+          <div class="opts" data-key="Kondisi Gigi Secara Umum" data-type="radio" data-req></div>
+          <div class="err-msg">Pilih salah satu.</div>
+        </div>
+        <div class="f span">
+          <span class="lbl req">Susunan gigi</span>
+          <div class="opts" data-key="Susunan Gigi " data-type="radio" data-req></div>
+          <div class="err-msg">Pilih salah satu.</div>
+        </div>
+        <div class="f span">
+          <span class="lbl req">Karang gigi</span>
+          <div class="opts" data-key="Karang Gigi" data-type="radio" data-req></div>
+          <div class="err-msg">Pilih salah satu.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. TINDAKAN ============ -->
+    <section class="card">
+      <div class="sec-head"><div class="sec-num">3</div><h2>Tindakan hari ini</h2></div>
+      <p class="sec-desc">Centang tindakannya dulu — kolom nomor gigi akan muncul sendiri sesuai yang dicentang.</p>
+      <div class="grid two">
+        <div class="f span">
+          <span class="lbl">Tindakan yang dilakukan</span>
+          <div class="opts" data-key="Tindakan hari ini" data-type="check"></div>
+        </div>
+        <div class="f span hide" data-gigi="Penambalan gigi" data-label="Penambalan gigi" data-muncul="Penambalan gigi"></div>
+        <div class="f span hide" data-gigi="Pencabutan gigi" data-label="Pencabutan gigi" data-muncul="Pencabutan gigi"></div>
+        <div class="f span hide" data-gigi="Perawatan saluran akar gigi" data-label="Perawatan saluran akar gigi" data-muncul="Perawatan saluran akar gigi"></div>
+        <div class="f span hide" data-muncul="Lainnya">
+          <label for="tindakanLain">Tindakan lainnya</label>
+          <input type="text" id="tindakanLain" data-key="Tindakan lainnya" placeholder="Tulis tindakan yang dilakukan hari ini">
+        </div>
+        <div class="f span">
+          <span class="lbl">Instruksi pasca tindakan</span>
+          <div class="opts" data-key="Intruksi Pasca Tindakan" data-type="check"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. PESAN & REKOMENDASI ============ -->
+    <section class="card">
+      <div class="sec-head"><div class="sec-num">4</div><h2>Pesan dokter &amp; rekomendasi</h2></div>
+      <p class="sec-desc">Bagian ini yang tampil di halaman "Pesan Dari Dokter" pada rapor.</p>
+      <div class="grid">
+        <div class="f">
+          <span class="lbl">Pesan dokter</span>
+          <div class="opts" data-key="Pesan Dokter" data-type="check"></div>
+        </div>
+        <div class="f">
+          <label for="pesanLain">Pesan lainnya <span class="hint">(opsional, ditulis bebas)</span></label>
+          <textarea id="pesanLain" data-key="Pesan lainnya" placeholder="Catatan khusus untuk orang tua"></textarea>
+        </div>
+        <div class="f">
+          <span class="lbl">Rekomendasi perawatan lanjutan</span>
+          <div class="opts" data-key="Rekomendasi Perawatan Lanjutan" data-type="check"></div>
+        </div>
+        <div class="f">
+          <label for="rekomLain">Rekomendasi perawatan lainnya <span class="hint">(opsional)</span></label>
+          <input type="text" id="rekomLain" data-key="Rekomendasi Perawatan Lainnya" placeholder="Contoh: rujuk Sp.KGA, tambal gigi 62">
+        </div>
+
+        <div class="f span sub-blok">
+          <div class="sub-judul">Rekomendasi produk</div>
+          <div class="grid two">
+            <div class="f">
+              <span class="lbl req">Sikat gigi</span>
+              <div class="opts" data-key="Rekomendasi Sikat Gigi" data-type="check" data-req></div>
+              <div class="err-msg">Pilih minimal satu.</div>
+            </div>
+            <div class="f">
+              <span class="lbl req">Pasta gigi</span>
+              <div class="opts" data-key="Rekomendasi Pasta Gigi" data-type="check" data-req></div>
+              <div class="err-msg">Pilih minimal satu.</div>
+            </div>
+            <div class="f">
+              <span class="lbl req">Vitamin / perlindungan gigi</span>
+              <div class="opts" data-key="Rekomendasi Vitamin Gigi" data-type="check" data-req></div>
+              <div class="err-msg">Pilih minimal satu.</div>
+            </div>
+            <div class="f">
+              <span class="lbl">Produk lainnya <span class="hint">(kalau ada)</span></span>
+              <div class="opts" data-key="Rekomendasi Produk Gigi Lainnya" data-type="check"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="f">
+          <label class="req" for="nextVisit">Tanggal kunjungan berikutnya</label>
+          <input type="date" id="nextVisit" data-key="Tanggal Pemeriksaan Selanjutnya" data-req>
+          <div class="quick">
+            <button type="button" data-add="14">+2 minggu</button>
+            <button type="button" data-add="30">+1 bulan</button>
+            <button type="button" data-add="90">+3 bulan</button>
+            <button type="button" data-add="180">+6 bulan</button>
+          </div>
+          <div class="err-msg">Wajib diisi.</div>
+        </div>
+      </div>
+    </section>
+
+  </form>
+</div>
+
+<div class="bar">
+  <div class="bar-inner">
+    <div class="status" id="status">Periksa lagi sebelum kirim — WhatsApp langsung terkirim ke orang tua.</div>
+    <button class="btn primary" id="submitBtn">Kirim rapor gigi</button>
+  </div>
+</div>
+
+<script>
+/* ======================================================================
+   ===========================  KONFIGURASI  ============================
+   ====================================================================== */
+const CONFIG = {
+
+  // 1) WAJIB DIISI. URL Web App Apps Script (Deploy > Manage deployments).
+  //    Contoh: "https://script.google.com/macros/s/AKfycb..../exec"
+  API_URL: "",
+
+  // 2) Jangan diubah — harus sama dengan yang ada di Google Sheet
+  FORM_ID: "ca374c5",
+  FORM_NAME: "Form Rapor Gigi Anak",
+
+  // 3) Alamat halaman rapor (index.html) di GitHub Pages.
+  //    WAJIB sama dengan RAPOR_BASE di watzap.gs, dan diakhiri '?id='
+  RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi/?id="
+};
+
+// Nomor WhatsApp tiap cabang, format sama seperti di Sheet (tanpa 62 di depan).
+const CABANG = {
+  "Medikids BSD":"8111015531", "Medikids Bekasi":"8118905531", "Medikids Bogor":"8111865531",
+  "Medikids Cibinong":"8111045531", "Medikids Cibubur":"8118305531", "Medikids Cikarang":"81112055531",
+  "Medikids Cikupa":"8118175531", "Medikids Cilegon":"8111385531", "Medikids Cipondoh":"81181185531",
+  "Medikids Dago":"8118505531", "Medikids Depok":"8119925531", "Medikids Grand Wisata":"81119755531",
+  "Medikids Green Terrace":"8111875531", "Medikids JGC":"8118125531", "Medikids Kalimalang":"8118065531",
+  "Medikids Karawaci":"81119915531", "Medikids Karawang":"8118195531", "Medikids Kebon Jeruk":"8119465531",
+  "Medikids Kemang":"8111895531", "Medikids Lebak Bulus":"81119055531", "Medikids Makassar":"81181165531",
+  "Medikids Padang":"8118675531", "Medikids Palembang":"8118715531", "Medikids Pancoran Mas":"81188075531",
+  "Medikids Pondok Indah":"8119321531", "Medikids RSBL":"81121915531", "Medikids Rawamangun":"81119753531",
+  "Medikids Rempoa":"81119985531", "Medikids Sawangan":"811815531", "Medikids Serpong":"81110155531",
+  "Medikids Sunter":"81188085531", "Medikids Surabaya":"8118825531"
+};
+
+// Pilihan tiap field — teksnya sama persis dengan data yang berjalan di Sheet
+const OPSI = {
+  "Kondisi Gigi Secara Umum":[
+    "Kondisi Gigi Baik Sekali","Kondisi Gigi Cukup Baik",
+    "Kondisi Gigi Kurang Baik","Kondisi Gigi Perlu Perhatian"],
+  "Susunan Gigi ":[
+    "Rapi dan Normal : Gigi tertata lurus dan tidak ada tanda-tanda kelainan.",
+    "Gigi Tidak Rapi (Maloklusi): Gigi tidak tersusun dengan baik, misalnya berjejal, terlalu maju, atau tidak sejajar."],
+  "Karang Gigi":[
+    "Tidak Ada Karang Gigi : Gigi bersih tanpa penumpukan plak atau karang gigi",
+    "Karang Gigi Ringan : Plak yang mengeras mulai terbentuk di sekitar gusi dan sela-sela gigi",
+    "Karang Gigi Sedang : Karang terlihat jelas di bagian leher gigi dan mulai menyebar ke bawah garis gusi",
+    "Karang Gigi Parah : Karang menutupi sebagian besar permukaan gigi dan masuk ke area di bawah gusi."],
+  "Tindakan hari ini":[
+    "Observasi awal (belum dilakukan tindakan)","Pembersihan karang gigi","Penambalan gigi",
+    "Pencabutan gigi","Perawatan saluran akar gigi","Topikal fluoride/dental sealant","Lainnya"],
+  "Intruksi Pasca Tindakan":[
+    "Tetap jaga kebersihan gigi dengan sikat gigi 2x sehari",
+    "Tidak diperbolehkan makan/mengunyah 1 jam setelah perawatan",
+    "Jangan makan makanan keras/lengket (selama 24 jam)",
+    "Jangan meludah & berkumur selama 30 menit setelah perawatan",
+    "Hindari menggigit/memegang area gigi yang baru dilakukan perawatan",
+    "Jangan mengunyah/menggigit langsung di area gigi yang menjalani perawatan",
+    "Hindari mengunyah pada daerah gigi yang menjalani perawatan",
+    "Jangan konsumsi makanan/minuman terlalu panas atau dingin",
+    "Gigit kapas kuat – kuat pada area pipi yang mengalami pencabutan selama 5-10 menit",
+    "Konsumsi obat sesuai anjuran dokter"],
+  "Pesan Dokter":[
+    "Tetap jaga kebersihan gigi anak dengan menyikat gigi dua kali sehari dan jangan lupa periksa rutin setiap 6 bulan ya!",
+    "Gigi anak butuh perhatian khusus agar selalu sehat. Ayo ajak anak rajin sikat gigi sebelum tidur dan kurangi konsumsi gula.",
+    "Hasil pemeriksaan menunjukkan ada beberapa hal yang perlu segera ditangani. Disarankan untuk menjadwalkan kunjungan berikutnya agar bisa dilakukan perawatan."],
+  "Rekomendasi Perawatan Lanjutan":[
+    "Tambal Gigi","Scaling Gigi","Topical Application Fluoride",
+    "Pencabutan Gigi","Perawatan Ortodonti/Pre-Ortodonti"],
+  "Rekomendasi Sikat Gigi":[
+    "Step 1 (0-2 Tahun)","Step 2 (3-5 Tahun)","Step 3 (6-9 Tahun)","> 9 Tahun"],
+  "Rekomendasi Pasta Gigi":[
+    "Baby (Non Fluoride)","Step 1 (0-5 Tahun)","Step 2 (6-12 Tahun)"],
+  "Rekomendasi Vitamin Gigi":[
+    "Tooth Mousse","Probiotik"],
+  "Rekomendasi Produk Gigi Lainnya":[
+    "Dental Floss","Dental Floss Pick","Sikat Interdental"]
+};
+
+// Kolom di Sheet yang sudah tidak dipakai, tetap dikirim kosong supaya
+// urutan kolom tidak bergeser (watzap.gs membaca kolom berdasarkan nomor).
+const KOLOM_KOSONG = [
+  "Usia Pasien","Event","Foto Pasien","Penjelasan_Hidden",
+  "No Label field_ca4e46e","No Label field_327ac6d","No Label field_7033736","No Label field_c4d46b8"
+];
+
+/* ======================================================================
+   ==================  DI BAWAH SINI TIDAK PERLU DIEDIT  ================
+   ====================================================================== */
+
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+
+if(!CONFIG.API_URL) $("#cfgWarn").classList.remove("hide");
+
+/* ======================================================================
+   NOMOR GIGI  —  penomoran FDI, urutan mengikuti gambar odontogram klinik
+   ====================================================================== */
+const BARIS_GIGI = [
+  ["Permanen atas", "18 → 28",
+   ["18","17","16","15","14","13","12","11","21","22","23","24","25","26","27","28"]],
+  ["Susu atas", "55 → 65",
+   ["55","54","53","52","51","61","62","63","64","65"]],
+  ["Susu bawah", "85 → 75",
+   ["85","84","83","82","81","71","72","73","74","75"]],
+  ["Permanen bawah", "48 → 38",
+   ["48","47","46","45","44","43","42","41","31","32","33","34","35","36","37","38"]]
+];
+function pecahGigi(v){ return String(v||"").split(",").map(s=>s.trim()).filter(Boolean); }
+
+$$("[data-gigi]").forEach(wrap=>{
+  const key=wrap.dataset.gigi, uid=key.replace(/\W+/g,"_");
+
+  const lab=document.createElement("label");
+  lab.setAttribute("for","in_"+uid);
+  lab.textContent=wrap.dataset.label+" ";
+  const hint=document.createElement("span");
+  hint.className="hint"; hint.textContent="(klik nomor giginya)";
+  lab.appendChild(hint);
+
+  const input=document.createElement("input");
+  input.type="text"; input.id="in_"+uid; input.dataset.key=key;
+  input.placeholder="kosongkan kalau tidak ada"; input.autocomplete="off";
+
+  const pick=document.createElement("div");
+  pick.className="gigipick";
+  BARIS_GIGI.forEach(([judul,rentang,nomor])=>{
+    const row=document.createElement("div"); row.className="gp-row";
+    const l=document.createElement("span"); l.className="gp-lbl";
+    l.textContent=judul;
+    const rb=document.createElement("b"); rb.textContent=rentang;
+    l.appendChild(rb);
+    const btns=document.createElement("div"); btns.className="gp-btns";
+    nomor.forEach(n=>{
+      const t=document.createElement("button");
+      t.type="button"; t.className="gt"; t.dataset.n=n; t.textContent=n;
+      btns.appendChild(t);
+    });
+    row.append(l,btns);
+    pick.appendChild(row);
+  });
+
+  wrap.append(lab,input,pick);
+
+  const sinkron=()=>{
+    const list=pecahGigi(input.value);
+    pick.querySelectorAll(".gt").forEach(b=>b.classList.toggle("on",list.includes(b.dataset.n)));
+  };
+  pick.addEventListener("click",e=>{
+    const b=e.target.closest(".gt");
+    if(!b) return;
+    const list=pecahGigi(input.value), n=b.dataset.n, at=list.indexOf(n);
+    if(at>=0) list.splice(at,1); else list.push(n);
+    input.value=list.join(", ");
+    sinkron();
+  });
+  input.addEventListener("input",sinkron);
+});
+
+/* ---------- Rapor ID (memakai nama pasien) ----------
+   Bentuknya: 2026-06-03-Rapor-Gigi-Tanahrum-Abdalla-Sasongko-K7M2
+   4 huruf di belakang wajib ada supaya pasien dengan nama sama
+   (atau kunjungan kedua di hari yang sama) tidak saling tertukar,
+   dan supaya link orang lain tidak bisa ditebak begitu saja.        */
+let KODE_UNIK="";
+function kodeAcak(n){
+  const huruf="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s="";
+  const buf=new Uint32Array(n);
+  (window.crypto||window.msCrypto).getRandomValues(buf);
+  for(let i=0;i<n;i++) s+=huruf[buf[i]%huruf.length];
+  return s;
+}
+function slugNama(v){
+  return String(v||"")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^A-Za-z0-9 ]+/g," ")
+    .trim().replace(/\s+/g,"-").slice(0,60).replace(/-+$/,"");
+}
+function raporIdSekarang(){
+  const tgl=$("#periksa").value||hariIniJakarta();
+  const nama=slugNama($("#nama").value)||"Pasien";
+  return tgl+"-Rapor-Gigi-"+nama+"-"+KODE_UNIK;
+}
+function segarkanRaporId(){ KODE_UNIK=kodeAcak(4); updateLinkPrev(); }
+function updateLinkPrev(){
+  $("#linkPrev").textContent = CONFIG.RAPOR_BASE+raporIdSekarang();
+}
+
+/* ---------- tanggal & nomor HP ---------- */
+function hariIniJakarta(){ return new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Jakarta"}); }
+function tambahHari(iso,n){ const d=new Date(iso+"T00:00:00"); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+function rapikanNomorHP(v){
+  let s=String(v||"").replace(/\D/g,"");
+  if(!s) return "";
+  s=s.replace(/^620+/,"62");
+  if(s.startsWith("62")) return s;
+  return "62"+s.replace(/^0+/,"");
+}
+
+/* ---------- dropdown cabang ---------- */
+const selCabang=$("#cabang");
+selCabang.insertAdjacentHTML("beforeend",'<option value="">— pilih cabang —</option>');
+Object.keys(CABANG).forEach(n=>selCabang.insertAdjacentHTML("beforeend","<option>"+n+"</option>"));
+selCabang.addEventListener("change",()=>{
+  const no=CABANG[selCabang.value]||"";
+  $("#cabangPrev").textContent="No WA klinik: "+(no||"—");
+});
+
+/* ---------- radio & checkbox ---------- */
+$$(".opts[data-key]").forEach(box=>{
+  const key=box.dataset.key;
+  const type=box.dataset.type==="radio"?"radio":"checkbox";
+  const name="g_"+key.trim().replace(/\W+/g,"_");
+  (OPSI[key]||[]).forEach(teks=>{
+    const lab=document.createElement("label");
+    lab.className="opt";
+    lab.innerHTML='<input type="'+type+'" name="'+name+'"><span></span>';
+    lab.querySelector("span").textContent=teks;
+    lab.querySelector("input").value=teks;
+    box.appendChild(lab);
+  });
+  box.addEventListener("change",()=>{
+    $$(".opt",box).forEach(o=>o.classList.toggle("on",o.querySelector("input").checked));
+    tandaiBeres(box);
+  });
+});
+// "Lainnya" hanya dipakai untuk memunculkan kolom, tidak ikut ditulis ke Sheet
+const NILAI_PEMICU = ["Lainnya"];
+function nilaiOpts(box){
+  return $$("input:checked",box).map(i=>i.value)
+    .filter(v=>!NILAI_PEMICU.includes(v)).join(", ");
+}
+
+/* ---------- kolom yang tampil sesuai tindakan yang dicentang ---------- */
+const boxTindakan = $('.opts[data-key="Tindakan hari ini"]');
+function terapkanKondisi(){
+  const dicentang = $$("input:checked", boxTindakan).map(i=>i.value);
+  $$("[data-muncul]").forEach(w=>{
+    const tampil = dicentang.includes(w.dataset.muncul);
+    w.classList.toggle("hide", !tampil);
+    if(!tampil){
+      // kolom yang disembunyikan dikosongkan, supaya tidak ada sisa data terkirim
+      $$("input[data-key]", w).forEach(i=>{
+        if(i.value){ i.value=""; i.dispatchEvent(new Event("input")); }
+      });
+    }
+  });
+}
+boxTindakan.addEventListener("change", terapkanKondisi);
+
+/* ---------- preview kecil ---------- */
+$("#hp").addEventListener("input",()=>{
+  const n=rapikanNomorHP($("#hp").value);
+  $("#hpPrev").textContent="Akan dikirim ke: "+(n||"—");
+});
+function hitungUsia(){
+  const v=$("#lahir").value;
+  if(!v){ $("#usiaPrev").textContent="Usia: —"; return; }
+  const l=new Date(v+"T00:00:00"), k=new Date(($("#periksa").value||hariIniJakarta())+"T00:00:00");
+  let th=k.getFullYear()-l.getFullYear(), bl=k.getMonth()-l.getMonth();
+  if(k.getDate()<l.getDate()) bl--;
+  if(bl<0){ th--; bl+=12; }
+  if(th<0){ $("#usiaPrev").textContent="Usia: —"; return; }
+  $("#usiaPrev").textContent="Usia: "+(th>0? th+" tahun"+(bl>0?" "+bl+" bulan":"") : bl+" bulan");
+}
+$("#lahir").addEventListener("change",hitungUsia);
+$("#periksa").addEventListener("change",hitungUsia);
+$("#nama").addEventListener("input",updateLinkPrev);
+$("#periksa").addEventListener("change",updateLinkPrev);
+
+/* ---------- tombol tanggal cepat ---------- */
+$$(".quick button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    $("#nextVisit").value=tambahHari($("#periksa").value||hariIniJakarta(),+b.dataset.add);
+    tandaiBeres($("#nextVisit"));
+  });
+});
+
+/* ---------- validasi ---------- */
+function pesanErrDari(el){ const f=el.closest(".f"); return f?$(".err-msg",f):null; }
+function tandaiBeres(el){
+  el.classList.remove("bad");
+  const m=pesanErrDari(el); if(m) m.classList.remove("show");
+}
+$$("[data-req]").forEach(el=>{
+  if(el.tagName==="INPUT"||el.tagName==="SELECT") el.addEventListener("input",()=>tandaiBeres(el));
+});
+function validasi(){
+  let pertama=null;
+  $$("[data-req]").forEach(el=>{
+    const kosong = el.classList.contains("opts") ? !nilaiOpts(el) : !el.value.trim();
+    el.classList.toggle("bad",kosong);
+    const m=pesanErrDari(el); if(m) m.classList.toggle("show",kosong);
+    if(kosong && !pertama) pertama=el;
+  });
+  if(pertama){
+    if(pertama.scrollIntoView) pertama.scrollIntoView({behavior:"smooth",block:"center"});
+    $("#status").textContent="Masih ada kolom wajib yang kosong.";
+  }
+  return !pertama;
+}
+
+/* ---------- kumpulkan data ---------- */
+function rapikanNomorGigi(v){ return pecahGigi(v).join(", "); }
+function ambilData(){
+  const d={};
+  d["form_id"]=CONFIG.FORM_ID;
+  d["form_name"]=CONFIG.FORM_NAME;
+  KOLOM_KOSONG.forEach(k=>d[k]="");
+  $$("[data-key]").forEach(el=>{
+    const k=el.dataset.key;
+    d[k]= el.classList.contains("opts") ? nilaiOpts(el) : el.value.trim();
+  });
+  ["Gigi Berlubang","Sisa Akar","Gigi Perlu Dicabut",
+   "Penambalan gigi","Pencabutan gigi","Perawatan saluran akar gigi"].forEach(k=>{
+    d[k]=rapikanNomorGigi(d[k]);
+  });
+  d["No HP"]=rapikanNomorHP(d["No HP"]);
+  d["nomorklinik"]=CABANG[d["Klinik Cabang"]]||"";
+  d["Rapor ID"]=raporIdSekarang();
+  return d;
+}
+
+/* ---------- kirim ---------- */
+const btn=$("#submitBtn");
+btn.addEventListener("click",async()=>{
+  if(!CONFIG.API_URL){
+    $("#cfgWarn").classList.remove("hide");
+    const w=$("#cfgWarn");
+    if(w.scrollIntoView) w.scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+  if(!validasi()) return;
+
+  const data=ambilData();
+  btn.disabled=true; btn.textContent="Mengirim…";
+  $("#status").textContent="Mengirim data ke Google Sheet…";
+  try{
+    const body=new URLSearchParams();
+    Object.entries(data).forEach(([k,v])=>body.append(k,v==null?"":v));
+    await fetch(CONFIG.API_URL,{method:"POST",mode:"no-cors",body});
+    tampilkanSukses(data);
+  }catch(e){
+    $("#status").textContent="Gagal mengirim. Cek koneksi internet, lalu tekan Kirim lagi.";
+    btn.disabled=false; btn.textContent="Kirim rapor gigi";
+  }
+});
+
+function tampilkanSukses(d){
+  const link=CONFIG.RAPOR_BASE+d["Rapor ID"];
+  $("#recap").innerHTML="";
+  [["Pasien",d["Nama Pasien"]],["No HP",d["No HP"]],["Cabang",d["Klinik Cabang"]],
+   ["Kategori",d["Kategori"]],["Tanggal",d["Tanggal Pemeriksaan"]],["Link rapor",link]
+  ].forEach(([a,b])=>{
+    const row=document.createElement("div");
+    const s1=document.createElement("span"); s1.textContent=a;
+    const s2=document.createElement("span"); s2.textContent=b; s2.style.wordBreak="break-all";
+    row.append(s1,s2); $("#recap").appendChild(row);
+  });
+  $("#done").classList.remove("hide");
+  btn.disabled=false; btn.textContent="Kirim rapor gigi";
+  $("#status").textContent="Data terakhir berhasil dikirim.";
+}
+
+/* ---------- pasien berikutnya / reset ---------- */
+$("#nextPatient").addEventListener("click",()=>{
+  const s={cabang:$("#cabang").value,dokter:$("#dokter").value,
+           periksa:$("#periksa").value,kategori:$("#kategori").value};
+  bersihkan();
+  $("#cabang").value=s.cabang; selCabang.dispatchEvent(new Event("change"));
+  $("#dokter").value=s.dokter; $("#periksa").value=s.periksa; $("#kategori").value=s.kategori;
+  $("#done").classList.add("hide");
+  if(window.scrollTo) window.scrollTo({top:0,behavior:"smooth"});
+  $("#nama").focus();
+});
+$("#resetAll").addEventListener("click",()=>{
+  bersihkan();
+  $("#done").classList.add("hide");
+  if(window.scrollTo) window.scrollTo({top:0,behavior:"smooth"});
+  $("#nama").focus();
+});
+function bersihkan(){
+  $("#form").reset();
+  $$(".opt").forEach(o=>o.classList.remove("on"));
+  $$(".bad").forEach(e=>e.classList.remove("bad"));
+  $$(".err-msg").forEach(e=>e.classList.remove("show"));
+  $("#periksa").value=hariIniJakarta();
+  $("#hpPrev").textContent="Akan dikirim ke: —";
+  $("#usiaPrev").textContent="Usia: —";
+  $("#cabangPrev").textContent="No WA klinik: —";
+  terapkanKondisi();
+  segarkanRaporId();
+}
+
+/* ---------- nilai awal ---------- */
+$("#periksa").value=hariIniJakarta();
+terapkanKondisi();
+segarkanRaporId();
+</script>
+</body>
+</html>
