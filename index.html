@@ -275,7 +275,7 @@ ul.clean li{margin-bottom:4px;font-size:14px}
 const CONFIG = {
 
   // 1) WAJIB DIISI — URL Web App Apps Script, sama dengan yang di input.html
-  API_URL: "https://script.google.com/macros/s/AKfycbwGhEqs2xzdQH1IJT5WrQ_PeBwoCuGV-1Avy0LfYylPk23Zx-3OPuMWIxk7Fq0wZ2x3dA/exec",
+  API_URL: "",
 
   // 2) Nomor WhatsApp CRO untuk tombol "Tanya klinik". Format 62...
   //    Kosongkan ("") kalau tombolnya mau disembunyikan.
@@ -284,9 +284,9 @@ const CONFIG = {
   // 3) Gambar gigi (odontogram) yang ditampilkan ke orang tua.
   //    Upload file gambarnya ke repo GitHub yang sama, lalu tulis nama filenya
   //    di sini, contoh: "odontogram.png"
-  //    Boleh juga link penuh: "https://mhdcbusdev.github.io/Rapor-Gigi/odontogram.png"
+  //    Boleh juga link penuh: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/Gambar Rapor Gigi.png"
   //    Kosongkan ("") kalau belum ada gambarnya.
-  GAMBAR_GIGI: "",
+  GAMBAR_GIGI: "Gambar Rapor Gigi.png",
 
   // 4) Peta gigi berwarna (gambar yang dibuat otomatis, gigi bermasalah
   //    diberi warna). Biarkan true supaya orang tua tahu gigi mana yang
@@ -492,7 +492,8 @@ function render(d){
   /* ---- gambar gigi dari file (kalau disediakan) ---- */
   if(CONFIG.GAMBAR_GIGI){
     const img=$("#gambarGigi");
-    img.src=CONFIG.GAMBAR_GIGI;
+    // spasi pada nama file diubah jadi %20 supaya sah sebagai URL
+    img.src=CONFIG.GAMBAR_GIGI.replace(/ /g,"%20");
     img.classList.remove("hide");
     img.addEventListener("error",()=>img.classList.add("hide"));
   }
