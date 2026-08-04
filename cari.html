@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Cari Rapor Gigi — Medikids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E43127; --red-dark:#B7241C; --red-soft:#FFEDE9;
+  --navy:#1D3A63; --navy-soft:#5C7395;
+  --cream:#FFF6EF; --card:#fff;
+  --mint:#17B3A3; --mint-soft:#E8F8F6; --yellow:#FFC72C;
+  --line:#F2DFD4; --line-strong:#E4C7B8;
+  --shadow:0 1px 2px rgba(29,58,99,.05), 0 8px 24px -12px rgba(29,58,99,.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--cream);color:var(--navy);
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2{font-family:'Baloo 2',sans-serif;font-weight:800;letter-spacing:-.01em;margin:0}
+
+.topbar{position:sticky;top:0;z-index:20;background:var(--red);color:#fff;padding:14px 18px;
+  box-shadow:0 6px 18px -10px rgba(180,36,28,.7)}
+.topbar-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar h1{font-size:22px;line-height:1.1}
+.topbar .sub{font-size:12.5px;opacity:.9;font-weight:500}
+.badge{margin-left:auto;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+  padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);padding:20px;margin-bottom:16px}
+.notice{background:#FFF3D6;border:1px solid var(--yellow);border-left:5px solid var(--yellow);
+  border-radius:10px;padding:13px 15px;font-size:13.5px;margin-bottom:18px}
+.notice.err{background:#FFE9E7;border-color:var(--red);border-left-color:var(--red)}
+.notice code{background:rgba(29,58,99,.08);padding:1px 5px;border-radius:4px;font-size:12.5px}
+
+label{font-size:13px;font-weight:600;display:block;margin-bottom:6px}
+.hint{font-size:12px;color:var(--navy-soft);font-weight:500}
+.cari-row{display:flex;gap:10px;flex-wrap:wrap}
+input[type=search],input[type=text]{flex:1;min-width:200px;padding:12px 13px;font:inherit;font-size:15px;
+  color:var(--navy);background:#FFFDFB;border:1.5px solid var(--line-strong);border-radius:10px}
+input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,49,39,.14)}
+.btn{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:11px;
+  padding:12px 22px;cursor:pointer;transition:.15s}
+.btn.primary{background:var(--red);color:#fff}
+.btn.primary:hover{background:var(--red-dark)}
+.btn:disabled{background:#D9C7BE;cursor:not-allowed}
+.btn.kecil{font-size:13.5px;padding:9px 15px;border-radius:9px}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line-strong)}
+.btn.ghost:hover{border-color:var(--navy-soft)}
+.btn.hijau{background:var(--mint);color:#fff}
+.btn.hijau:hover{background:#0E9E90}
+
+.status{font-size:13px;color:var(--navy-soft);margin-top:10px;font-weight:500;min-height:18px}
+
+.hasil{display:flex;flex-direction:column;gap:10px}
+.item{border:1.5px solid var(--line-strong);border-radius:12px;padding:14px;background:#FFFDFB}
+.item .nm{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:18px;line-height:1.2}
+.item .meta{font-size:13px;color:var(--navy-soft);margin-top:3px}
+.item .meta b{color:var(--navy);font-weight:600}
+.item .aksi{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.item.terkirim{border-color:var(--mint);background:var(--mint-soft)}
+.kabar{font-size:12.5px;font-weight:700;color:#0E7A70;margin-top:9px;display:none}
+.kabar.tampil{display:block}
+.kabar.gagal{color:var(--red-dark)}
+.kosong{text-align:center;color:var(--navy-soft);font-size:14px;padding:26px 10px}
+.hide{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>Cari Rapor Gigi</h1>
+      <div class="sub">Untuk CRO &amp; anak klinik — Medikids</div>
+    </div>
+    <div class="badge">Kirim ulang rapor</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="notice err hide" id="cfgWarn">
+    <b>Belum bisa dipakai.</b> <code>API_URL</code> di dalam file <code>cari.html</code> masih kosong.
+  </div>
+
+  <div class="card">
+    <label for="q">Nama pasien</label>
+    <div class="cari-row">
+      <input type="search" id="q" placeholder="Ketik sebagian nama, contoh: aisyah" autocomplete="off">
+      <button class="btn primary" id="btnCari">Cari</button>
+    </div>
+    <div class="hint" style="margin-top:8px">Minimal 3 huruf. Hasil terbaru muncul paling atas.</div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="card hide" id="kartuHasil">
+    <div class="hasil" id="hasil"></div>
+  </div>
+
+</div>
+
+<script>
+/* ======================================================================
+   ===========================  KONFIGURASI  ============================
+   ====================================================================== */
+const CONFIG = {
+
+  // URL Web App Apps Script — sama dengan yang dipakai di input.html
+  API_URL: "https://script.google.com/macros/s/AKfycbwf2seE9OdI09XQeB0VB3W52bxGxM65LA8Af-CkObBga2Y78PCX5s1Ra89L6b2pwSV6xA/exec",
+
+  // Alamat halaman rapor, dipakai untuk tombol "Buka rapor"
+  RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id="
+};
+
+/* ======================================================================
+   ==================  DI BAWAH SINI TIDAK PERLU DIEDIT  ================
+   ====================================================================== */
+
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+const BULAN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+if(!CONFIG.API_URL) $("#cfgWarn").classList.remove("hide");
+
+function tglIndo(v){
+  const m=String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(!m) return String(v||"-");
+  return parseInt(m[3],10)+" "+BULAN[parseInt(m[2],10)-1]+" "+m[1];
+}
+function el(tag,cls,teks){
+  const n=document.createElement(tag);
+  if(cls) n.className=cls;
+  if(teks!==undefined) n.textContent=teks;
+  return n;
+}
+
+/* ---------- panggil Apps Script (fetch, lalu JSONP kalau diblokir) ---------- */
+function jsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb="cb_"+Math.random().toString(36).slice(2);
+    const s=document.createElement("script");
+    const t=setTimeout(()=>{bersih();reject(new Error("timeout"))},25000);
+    function bersih(){ delete window[cb]; s.remove(); }
+    window[cb]=(d)=>{ clearTimeout(t); bersih(); resolve(d); };
+    s.onerror=()=>{ clearTimeout(t); bersih(); reject(new Error("gagal")); };
+    s.src=url+"&callback="+cb;
+    document.body.appendChild(s);
+  });
+}
+async function panggil(params){
+  const url=CONFIG.API_URL+"?"+new URLSearchParams(params).toString();
+  try{
+    const r=await fetch(url);
+    if(!r.ok) throw new Error("http "+r.status);
+    return await r.json();
+  }catch(e){ return await jsonp(url); }
+}
+
+/* ---------- pencarian ---------- */
+const btn=$("#btnCari");
+async function cari(){
+  const q=$("#q").value.trim();
+  if(q.length<3){
+    $("#status").textContent="Ketik minimal 3 huruf nama pasien.";
+    return;
+  }
+  btn.disabled=true; btn.textContent="Mencari…";
+  $("#status").textContent="Mencari data pasien…";
+  $("#kartuHasil").classList.add("hide");
+  try{
+    const hasil=await panggil({aksi:"cari", q:q});
+    if(!hasil || !hasil.ok){
+      $("#status").textContent=(hasil && hasil.error) ? hasil.error : "Pencarian gagal. Coba lagi.";
+      return;
+    }
+    tampilkan(hasil);
+  }catch(e){
+    $("#status").textContent="Gagal menghubungi server. Cek koneksi internet, lalu coba lagi.";
+  }finally{
+    btn.disabled=false; btn.textContent="Cari";
+  }
+}
+btn.addEventListener("click",cari);
+$("#q").addEventListener("keydown",e=>{ if(e.key==="Enter") cari(); });
+
+function tampilkan(hasil){
+  const box=$("#hasil");
+  box.innerHTML="";
+  $("#kartuHasil").classList.remove("hide");
+
+  if(!hasil.hasil.length){
+    box.appendChild(el("div","kosong","Tidak ada pasien dengan nama itu. Coba potong namanya lebih pendek."));
+    $("#status").textContent="";
+    return;
+  }
+  $("#status").textContent = hasil.hasil.length + " rapor ditemukan" +
+    (hasil.lebih ? " (ditampilkan 15 terbaru — ketik nama lebih lengkap kalau belum ketemu)" : "");
+
+  hasil.hasil.forEach(r=>{
+    const it=el("div","item");
+    it.appendChild(el("div","nm", r.nama));
+
+    const m1=el("div","meta");
+    m1.append(document.createTextNode("Periksa "), el("b",null,tglIndo(r.tgl)));
+    if(r.cabang) m1.append(document.createTextNode(" · "), el("b",null,r.cabang));
+    it.appendChild(m1);
+
+    const m2=el("div","meta");
+    if(r.dokter) m2.append(document.createTextNode("Dokter "), el("b",null,r.dokter));
+    if(r.hp){
+      if(r.dokter) m2.append(document.createTextNode(" · "));
+      m2.append(document.createTextNode("HP "), el("b",null,r.hp));
+    }
+    it.appendChild(m2);
+
+    const aksi=el("div","aksi");
+
+    const buka=el("a","btn ghost kecil","Buka rapor");
+    buka.href=CONFIG.RAPOR_BASE+encodeURIComponent(r.id);
+    buka.target="_blank"; buka.rel="noopener";
+    buka.style.textDecoration="none";
+    aksi.appendChild(buka);
+
+    const salin=el("button","btn ghost kecil","Salin link");
+    salin.type="button";
+    salin.addEventListener("click",async()=>{
+      const link=CONFIG.RAPOR_BASE+r.id;
+      try{ await navigator.clipboard.writeText(link); salin.textContent="Tersalin"; }
+      catch(e){ salin.textContent="Gagal menyalin"; }
+      setTimeout(()=>salin.textContent="Salin link",2000);
+    });
+    aksi.appendChild(salin);
+
+    const kirim=el("button","btn hijau kecil","Kirim ke orang tua");
+    kirim.type="button";
+    const kabar=el("div","kabar");
+    kirim.addEventListener("click",async()=>{
+      if(!confirm("Kirim link rapor "+r.nama+" ke nomor "+r.hp+" lewat WhatsApp?")) return;
+      kirim.disabled=true; kirim.textContent="Mengirim…";
+      kabar.classList.remove("tampil","gagal");
+      try{
+        const h=await panggil({aksi:"kirim", id:r.id});
+        if(h && h.ok){
+          it.classList.add("terkirim");
+          kabar.textContent="Terkirim ke "+h.ke;
+          kabar.classList.add("tampil");
+          kirim.textContent="Sudah dikirim";
+        } else {
+          kabar.textContent=(h && h.error) ? h.error : "Pengiriman gagal.";
+          kabar.classList.add("tampil","gagal");
+          kirim.disabled=false; kirim.textContent="Kirim ke orang tua";
+        }
+      }catch(e){
+        kabar.textContent="Gagal menghubungi server. Coba lagi.";
+        kabar.classList.add("tampil","gagal");
+        kirim.disabled=false; kirim.textContent="Kirim ke orang tua";
+      }
+    });
+    aksi.appendChild(kirim);
+
+    it.appendChild(aksi);
+    it.appendChild(kabar);
+    box.appendChild(it);
+  });
+}
+
+$("#q").focus();
+</script>
+</body>
+</html>
