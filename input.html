@@ -341,6 +341,7 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
   </div>
 </div>
 
+<script src="config.js"></script>
 <script>
 /* ======================================================================
    ===========================  KONFIGURASI  ============================
@@ -349,7 +350,7 @@ const CONFIG = {
 
   // 1) WAJIB DIISI. URL Web App Apps Script (Deploy > Manage deployments).
   //    Contoh: "https://script.google.com/macros/s/AKfycb..../exec"
-  API_URL: "https://script.google.com/macros/s/AKfycbxWTJGKNnb669aadYusKQzRYQVjSJtbz-PALA20dDIaPO7hyqtLvftlpnVzcnRSzROocg/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbz3A6Qi6JznwcPFvmzekadQ_iY9ZVJH0lo1Y7rYzkh3PaBTV5BdZCjA0HxG6HcimI7h5g/exec",
 
   // 2) Jangan diubah — harus sama dengan yang ada di Google Sheet
   FORM_ID: "ca374c5",
@@ -359,6 +360,22 @@ const CONFIG = {
   //    WAJIB sama dengan RAPOR_BASE di watzap.gs, dan diakhiri '?id='
   RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id="
 };
+
+/* Nilai di atas hanya cadangan. Yang dipakai adalah isi config.js. */
+if(window.MHDC_CONFIG) Object.assign(CONFIG, window.MHDC_CONFIG);
+
+/* config.js wajib termuat. Kalau tidak, semua pengaturan ikut kosong. */
+if(!window.MHDC_CONFIG){
+  document.addEventListener("DOMContentLoaded",function(){
+    var d=document.createElement("div");
+    d.style.cssText="background:#FFE9E7;border:2px solid #E43127;color:#B7241C;padding:14px 16px;"+
+      "margin:16px;border-radius:10px;font-family:sans-serif;font-size:14px;font-weight:600";
+    d.textContent="File config.js tidak ditemukan. Pastikan config.js sudah diupload ke repo, "+
+      "satu folder dengan halaman ini.";
+    document.body.insertBefore(d, document.body.firstChild);
+  });
+}
+
 
 // Nomor WhatsApp tiap cabang, format sama seperti di Sheet (tanpa 62 di depan).
 const CABANG = {
@@ -372,7 +389,7 @@ const CABANG = {
   "Medikids Padang":"8118675531", "Medikids Palembang":"8118715531", "Medikids Pancoran Mas":"81188075531",
   "Medikids Pondok Indah":"8119321531", "Medikids RSBL":"81121915531", "Medikids Rawamangun":"81119753531",
   "Medikids Rempoa":"81119985531", "Medikids Sawangan":"811815531", "Medikids Serpong":"81110155531",
-  "Medikids Sunter":"81188085531", "Medikids Surabaya":"8118825531","Medikids Test":"085171087351"
+  "Medikids Sunter":"81188085531", "Medikids Surabaya":"8118825531"
 };
 
 // Pilihan tiap field — teksnya sama persis dengan data yang berjalan di Sheet
@@ -500,8 +517,8 @@ $$("[data-gigi]").forEach(wrap=>{
 });
 
 /* ---------- Rapor ID (memakai nama pasien) ----------
-   Bentuknya: 2026-06-03-Rapor-Gigi-Tanahrum-Abdalla-Sasongko-K7M2
-   4 huruf di belakang wajib ada supaya pasien dengan nama sama
+   Bentuknya: 2026-06-03-Rapor-Gigi-Tanahrum-Abdalla-Sasongko-K7M2XQ9F
+   8 huruf di belakang wajib ada supaya pasien dengan nama sama
    (atau kunjungan kedua di hari yang sama) tidak saling tertukar,
    dan supaya link orang lain tidak bisa ditebak begitu saja.        */
 let KODE_UNIK="";
@@ -524,7 +541,7 @@ function raporIdSekarang(){
   const nama=slugNama($("#nama").value)||"Pasien";
   return tgl+"-Rapor-Gigi-"+nama+"-"+KODE_UNIK;
 }
-function segarkanRaporId(){ KODE_UNIK=kodeAcak(4); updateLinkPrev(); }
+function segarkanRaporId(){ KODE_UNIK=kodeAcak(8); updateLinkPrev(); }
 function updateLinkPrev(){
   $("#linkPrev").textContent = CONFIG.RAPOR_BASE+raporIdSekarang();
 }
