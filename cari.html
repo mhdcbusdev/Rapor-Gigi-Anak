@@ -91,7 +91,7 @@ input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,4
     <b>Belum bisa dipakai.</b> <code>API_URL</code> di dalam file <code>cari.html</code> masih kosong.
   </div>
 
-  <div class="card">
+  <div class="card" id="kartuCari">
     <label for="q">Nama pasien</label>
     <div class="cari-row">
       <input type="search" id="q" placeholder="Ketik sebagian nama, contoh: aisyah" autocomplete="off">
@@ -107,6 +107,7 @@ input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,4
 
 </div>
 
+<script src="config.js"></script>
 <script>
 /* ======================================================================
    ===========================  KONFIGURASI  ============================
@@ -114,11 +115,27 @@ input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,4
 const CONFIG = {
 
   // URL Web App Apps Script — sama dengan yang dipakai di input.html
-  API_URL: "https://script.google.com/macros/s/AKfycbxWTJGKNnb669aadYusKQzRYQVjSJtbz-PALA20dDIaPO7hyqtLvftlpnVzcnRSzROocg/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbzIiD9uDXAhcyRLungqOiAZkPxBVAQ1kpesO3yOrr1onLKuuj5oq2O3wZz3hmLdxhYWwQ/exec",
 
   // Alamat halaman rapor, dipakai untuk tombol "Buka rapor"
   RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id="
 };
+
+/* Nilai di atas hanya cadangan. Yang dipakai adalah isi config.js. */
+if(window.MHDC_CONFIG) Object.assign(CONFIG, window.MHDC_CONFIG);
+
+/* config.js wajib termuat. Kalau tidak, semua pengaturan ikut kosong. */
+if(!window.MHDC_CONFIG){
+  document.addEventListener("DOMContentLoaded",function(){
+    var d=document.createElement("div");
+    d.style.cssText="background:#FFE9E7;border:2px solid #E43127;color:#B7241C;padding:14px 16px;"+
+      "margin:16px;border-radius:10px;font-family:sans-serif;font-size:14px;font-weight:600";
+    d.textContent="File config.js tidak ditemukan. Pastikan config.js sudah diupload ke repo, "+
+      "satu folder dengan halaman ini.";
+    document.body.insertBefore(d, document.body.firstChild);
+  });
+}
+
 
 /* ======================================================================
    ==================  DI BAWAH SINI TIDAK PERLU DIEDIT  ================
@@ -135,6 +152,8 @@ function tglIndo(v){
   if(!m) return String(v||"-");
   return parseInt(m[3],10)+" "+BULAN[parseInt(m[2],10)-1]+" "+m[1];
 }
+$("#q").focus();
+
 function el(tag,cls,teks){
   const n=document.createElement(tag);
   if(cls) n.className=cls;
@@ -159,9 +178,37 @@ async function panggil(params){
   const url=CONFIG.API_URL+"?"+new URLSearchParams(params).toString();
   try{
     const r=await fetch(url);
-    if(!r.ok) throw new Error("http "+r.status);
-    return await r.json();
-  }catch(e){ return await jsonp(url); }
+    const teks=await r.text();
+    try{
+      return JSON.parse(teks);
+    }catch(e){
+      // Apps Script menjawab, tapi bukan JSON -> tebak penyebabnya
+      return { ok:false, error: bacaMasalah(teks, r.status) };
+    }
+  }catch(e){
+    // fetch diblokir browser -> coba cara kedua (JSONP)
+    try{
+      return await jsonp(url);
+    }catch(e2){
+      return { ok:false, error:"Tidak bisa menghubungi Apps Script. Cek koneksi internet, lalu coba lagi." };
+    }
+  }
+}
+
+/* Menerjemahkan balasan aneh dari Apps Script jadi pesan yang bisa ditindaklanjuti */
+function bacaMasalah(teks, status){
+  const t=String(teks||"");
+  if(/Yepp this is the webhook/i.test(t))
+    return "Apps Script masih memakai versi lama. Buka Apps Script > Deploy > Manage deployments > ikon pensil > New version > Deploy.";
+  if(/Script function not found|is not defined|not a function|ReferenceError/i.test(t))
+    return "File Cari-Rapor.gs belum ada di Apps Script, atau belum di-Save.";
+  if(/accounts\.google\.com|Sign in|Masuk dengan|Choose an account/i.test(t))
+    return "Akses deployment masih terbatas. Di Manage deployments, ubah \u2018Who has access\u2019 menjadi Anyone.";
+  if(/Kolom .*Rapor ID/i.test(t))
+    return "Kolom Rapor ID belum ada. Jalankan menu Rapor Gigi > 1. Isi Rapor ID data lama.";
+  if(/Exception|Error/i.test(t))
+    return "Apps Script error. Buka Apps Script > Executions untuk melihat pesan lengkapnya.";
+  return "Balasan server tidak dikenali (status "+status+"). Cek Apps Script > Executions.";
 }
 
 /* ---------- pencarian ---------- */
@@ -272,7 +319,6 @@ function tampilkan(hasil){
   });
 }
 
-$("#q").focus();
 </script>
 </body>
 </html>
