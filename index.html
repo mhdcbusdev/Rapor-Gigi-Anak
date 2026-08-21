@@ -284,6 +284,9 @@ const CONFIG = {
   // 1) WAJIB DIISI — URL Web App Apps Script, sama dengan yang di input.html
   API_URL: "https://script.google.com/macros/s/AKfycbzJ043Mfmi_bRxQvYbMvSCIs8blryDwV9OPhZVBZ23J7yaROXWb04BAe8J3pWTJjeUv2Q/exec",
 
+  // 1b) Kunci akses, harus sama dengan ACCESS_KEY di Code.gs
+  ACCESS_KEY: "5698d533-1f90-4d76-bd1f-555ea054c324",
+
   // 2) Nomor WhatsApp CRO untuk tombol "Tanya klinik". Format 62...
   //    Kosongkan ("") kalau tombolnya mau disembunyikan.
   WA_CRO: "",
@@ -452,7 +455,8 @@ function jsonp(url){
   });
 }
 async function ambilRapor(id){
-  const url=CONFIG.API_URL+"?id="+encodeURIComponent(id);
+  const url=CONFIG.API_URL+"?id="+encodeURIComponent(id)+
+            "&key="+encodeURIComponent(CONFIG.ACCESS_KEY||"");
   try{
     const r=await fetch(url);
     if(!r.ok) throw new Error("http "+r.status);
