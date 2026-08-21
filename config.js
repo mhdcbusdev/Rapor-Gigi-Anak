@@ -19,6 +19,10 @@ window.MHDC_CONFIG = {
   /* 2) Alamat halaman rapor. Harus sama dengan RAPOR_BASE di watzap.gs */
   RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id=",
 
+  /* 2b) Kunci akses. HARUS sama persis dengan ACCESS_KEY di Code.gs.
+        Kalau diubah di Code.gs, ubah juga di sini. */
+  ACCESS_KEY: "5698d533-1f90-4d76-bd1f-555ea054c324",
+
   /* 3) Gambar di halaman rapor pasien (nama file di repo ini) */
   GAMBAR_JUDUL: "Judul Rapor Gigi.png",
   GAMBAR_GIGI:  "Gambar Rapor Gigi.png",
