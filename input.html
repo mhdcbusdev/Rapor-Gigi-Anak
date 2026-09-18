@@ -124,6 +124,11 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
   font-size:13px;margin-bottom:16px}
 .recap div{display:flex;gap:8px;padding:2px 0}
 .recap span:first-child{color:var(--navy-soft);min-width:92px;flex:none}
+.cek-klinik{text-align:left;background:#FFF3D6;border:1px solid var(--yellow);border-left:5px solid var(--yellow);
+  border-radius:10px;padding:12px 13px;font-size:12.5px;line-height:1.55;margin-bottom:16px;color:var(--navy)}
+.cek-klinik .hd{display:block;font-weight:800;margin-bottom:4px;font-size:13px}
+.cek-klinik .no{font-weight:800}
+.cek-klinik a{color:var(--red-dark);font-weight:800;text-decoration:none;white-space:nowrap}
 .hide{display:none !important}
 </style>
 </head>
@@ -135,6 +140,13 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
     <h2>Rapor terkirim</h2>
     <p>Data masuk Google Sheet, dan WhatsApp otomatis dikirim ke nomor orang tua serta nomor klinik.</p>
     <div class="recap" id="recap"></div>
+    <div class="cek-klinik">
+      <span class="hd">&#9888; Untuk staf klinik — cek notifikasi WhatsApp</span>
+      Rapor ini harusnya juga masuk ke WhatsApp klinik <span class="no" id="waKlinikCek">&mdash;</span>.
+      Kalau notifikasinya <b>tidak masuk</b> ke nomor klinik, berarti pengiriman gagal walaupun layar ini
+      sudah muncul. <b>Hold dulu &mdash; jangan kirim rapor berikutnya</b>, lalu hubungi BD Support
+      <a href="https://wa.me/6285171087351" target="_blank" rel="noopener">0851-7108-7351</a> untuk cek koneksi.
+    </div>
     <button class="btn primary" style="width:100%" id="nextPatient">Isi pasien berikutnya</button>
     <button class="btn ghost" style="width:100%;margin-top:8px" id="resetAll">Mulai dari kosong</button>
   </div>
@@ -721,6 +733,7 @@ function tampilkanSukses(d){
     const s2=document.createElement("span"); s2.textContent=b; s2.style.wordBreak="break-all";
     row.append(s1,s2); $("#recap").appendChild(row);
   });
+  $("#waKlinikCek").textContent = d["nomorklinik"] ? "0"+d["nomorklinik"] : "(nomor klinik belum diatur)";
   $("#done").classList.remove("hide");
   btn.disabled=false; btn.textContent="Kirim rapor gigi";
   $("#status").textContent="Data terakhir berhasil dikirim.";
