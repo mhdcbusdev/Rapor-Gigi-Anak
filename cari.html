@@ -144,7 +144,7 @@ select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,
 
 </div>
 
-<script src="config.js?v=3"></script>
+<script src="config.js?v=5"></script>
 <script>
 /* ======================================================================
    ===========================  KONFIGURASI  ============================
@@ -160,8 +160,8 @@ const CONFIG = {
 
   // Cadangan template pesan. Yang dipakai tetap isi config.js.
   PROMO_URL: "https://mhdc.co.id/wp-content/uploads/Promo-Diskon-Rapor-Gigi-Anak.pdf",
-  PESAN_WA: "Hai Parents, orang tua dari {nama} \u{1F44B},\nterima kasih sudah berkunjung ke {cabang} pada {tgl}! \u{1F9B7}\u{2728}\n\nIni Rapor Gigi {nama}. Silahkan buka link berikut :\n\n{link}\n\n\u{2728}Klaim *PROMO SPESIAL RAPOR GIGI*, klik link ini \u{2B07}\u{FE0F}\n{promo}\n\nSalam sehat dan senyum ceria,\nTim Medikids",
-  PESAN_WA_IBK: "Hai Parents, orang tua dari {nama} \u{1F44B},\nterima kasih sudah berkunjung ke {cabang} pada {tgl}! \u{1F9B7}\u{2728}\n\nIni Rapor Gigi {nama}. Silahkan buka link berikut :\n\n{link}\n\nSalam sehat dan senyum ceria,\nTim Medikids"
+  PESAN_WA: "Hai Parents, orang tua dari {nama},\nterima kasih sudah berkunjung ke {cabang} pada {tgl}!\n\nIni Rapor Gigi {nama}. Silahkan buka link berikut :\n\n{link}\n\nKlaim *PROMO SPESIAL RAPOR GIGI*, klik link ini :\n{promo}\n\nSalam sehat dan senyum ceria,\nTim Medikids",
+  PESAN_WA_IBK: "Hai Parents, orang tua dari {nama},\nterima kasih sudah berkunjung ke {cabang} pada {tgl}!\n\nIni Rapor Gigi {nama}. Silahkan buka link berikut :\n\n{link}\n\nSalam sehat dan senyum ceria,\nTim Medikids"
 };
 
 /* Nilai di atas hanya cadangan. Yang dipakai adalah isi config.js. */
@@ -193,7 +193,7 @@ if(!CONFIG.API_URL) $("#cfgWarn").classList.remove("hide");
 /* Daftar klinik cabang — nama harus sama persis dengan yang tersimpan di Sheet.
    Kalau ada cabang baru, cukup tambahkan namanya di sini. */
 const DAFTAR_CABANG = CONFIG.DAFTAR_CABANG || [
-  "Medikids Test","Medikids Batam","Medikids Bekasi","Medikids Bintaro","Medikids Bogor","Medikids BSD",
+  "Medikids Batam","Medikids Bekasi","Medikids Bintaro","Medikids Bogor","Medikids BSD",
   "Medikids Cibinong","Medikids Cibubur","Medikids Cikarang","Medikids Cikupa","Medikids Cilegon",
   "Medikids Cipondoh","Medikids Dago","Medikids Depok","Medikids Grand Wisata","Medikids Green Terrace",
   "Medikids JGC","Medikids Kalimalang","Medikids Karawaci","Medikids Karawang","Medikids Kebon Jeruk",
@@ -357,17 +357,23 @@ function tampilkan(hasil){
   $("#kartuHasil").classList.remove("hide");
   totalItem=0; sudahKirim=0; updateHitung();
 
-  if(!hasil.hasil.length){
+  // sembunyikan cabang uji-coba dari hasil (bisa ditambah di config.js: CABANG_SEMBUNYI)
+  const CABANG_SEMBUNYI = CONFIG.CABANG_SEMBUNYI || ["Medikids Test"];
+  const daftar = (hasil.hasil || []).filter(function(r){
+    return CABANG_SEMBUNYI.indexOf(String(r.cabang||"").trim()) === -1;
+  });
+
+  if(!daftar.length){
     box.appendChild(el("div","kosong","Tidak ada rapor yang cocok. Coba longgarkan filternya."));
     $("#status").textContent="";
     return;
   }
-  totalItem=hasil.hasil.length;
+  totalItem=daftar.length;
   updateHitung();
-  $("#status").textContent = hasil.hasil.length + " rapor ditemukan" +
+  $("#status").textContent = daftar.length + " rapor ditemukan" +
     (hasil.lebih ? " (ditampilkan sebagian — perkecil dengan pilih klinik/kategori atau ketik nama)" : "");
 
-  hasil.hasil.forEach(r=>{
+  daftar.forEach(r=>{
     const it=el("div","item");
     const nm=el("div","nm", r.nama);
     if(r.kategori){ const tg=el("span","tag",r.kategori); nm.appendChild(tg); }
