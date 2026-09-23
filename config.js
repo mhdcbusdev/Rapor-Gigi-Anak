@@ -34,6 +34,32 @@ window.MHDC_CONFIG = {
         Kosongkan ("") kalau tombolnya tidak dipakai. */
   WA_CRO: "",
 
+  /* 5b) TEMPLATE PESAN WHATSAPP (dikirim MANUAL oleh CRO dari halaman cari.html)
+         Ganti isi promo di sini saja. Placeholder yang bisa dipakai:
+           {nama}   -> nama pasien
+           {tgl}    -> tanggal periksa (contoh: 12 September 2026)
+           {cabang} -> nama cabang
+           {dokter} -> nama dokter
+           {link}   -> link rapor gigi
+         Baris kosong = jarak antar paragraf. Emoji boleh. */
+  PESAN_WA:
+`Halo Ayah/Bunda 😊
+
+Terima kasih sudah merawat gigi si kecil di Medikids {cabang}. Berikut Rapor Gigi *{nama}* dari pemeriksaan tanggal {tgl}:
+
+{link}
+
+Rapornya bisa dibuka kapan aja ya, Bun 🦷✨
+
+━━━━━━━━━━━━
+🎁 *PROMO BULAN INI*
+[ tulis detail promo di sini — mis. diskon scaling / fluoride / gratis kontrol berikutnya ]
+Info & booking bisa langsung balas chat ini ya 🙌
+━━━━━━━━━━━━
+
+Sampai jumpa di kunjungan berikutnya!
+— Medikids`,
+
   /* 6) Link video edukasi di halaman rapor (opsional) */
   VIDEO: {
     tambal:  "",
