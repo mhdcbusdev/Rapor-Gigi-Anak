@@ -14,7 +14,7 @@ window.MHDC_CONFIG = {
      Apps Script > Deploy > Manage deployments > lihat deployment yang
      Active > salin "Web app URL"
      ------------------------------------------------------------------ */
-  API_URL: "https://script.google.com/macros/s/AKfycbyTCvAQWFHzEzdJ933A9jgxYAm6aiyhV-hWDFHJdSTZ7C29Gva2cb0deirLlBgU8KwN/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbw0pGT_40DsoY3cDV9JbJuOy2K02aaCZcplOcCMkOVJxFyAa-NxpaRYRXfuNWJwOk95AA/exec",
 
   /* 2) Alamat halaman rapor. Harus sama dengan RAPOR_BASE di watzap.gs */
   RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id=",
@@ -37,38 +37,43 @@ window.MHDC_CONFIG = {
   /* 5b) TEMPLATE PESAN WHATSAPP (dikirim MANUAL oleh CRO dari cari.html)
          Isinya mengikuti watzap.gs. Aturan: First Dental Visit & Field Trip
          pakai PESAN_WA (ada promo); IBK pakai PESAN_WA_IBK (tanpa promo).
-         Placeholder: {nama} {cabang} {tgl} {dokter} {link} {promo} */
+         Placeholder: {nama} {cabang} {tgl} {dokter} {link} {promo}
+
+         CATATAN: emoji ditulis sebagai kode \u{...} supaya tidak rusak saat
+         file di-upload/paste. Ini yang muncul di WhatsApp:
+           \u{1F44B}=👋  \u{1F9B7}=🦷  \u{2728}=✨  \u{2B07}\u{FE0F}=⬇️  \u{1F970}=🥰
+         Teks biasa boleh diedit langsung; jangan ubah kode \u{...}. */
 
   /* Link promo — dipakai untuk mengganti {promo} */
   PROMO_URL: "https://mhdc.co.id/wp-content/uploads/Promo-Diskon-Rapor-Gigi-Anak.pdf",
 
   /* Pesan DENGAN promo (First Dental Visit & Field Trip) */
   PESAN_WA:
-`Hai Parents, orang tua dari {nama} 👋, 
-terima kasih sudah berkunjung ke {cabang} pada {tgl}! 🦷✨ 
+`Hai Parents, orang tua dari {nama} \u{1F44B}, 
+terima kasih sudah berkunjung ke {cabang} pada {tgl}! \u{1F9B7}\u{2728} 
 
 Ini Rapor Gigi {nama}. Silahkan buka link berikut untuk melihat hasil pemeriksaan lengkapnya :
 
 {link}
 
-✨Klaim *PROMO SPESIAL RAPOR GIGI*, klik link ini ⬇
+\u{2728}Klaim *PROMO SPESIAL RAPOR GIGI*, klik link ini \u{2B07}\u{FE0F}
 {promo}
 
-Jika ada yang ingin ditanyakan atau butuh bantuan lebih lanjut, Parents bisa langsung balas pesan ini ya. Kami siap membantu! 🥰
+Jika ada yang ingin ditanyakan atau butuh bantuan lebih lanjut, Parents bisa langsung balas pesan ini ya. Kami siap membantu! \u{1F970}
 
 Salam sehat dan senyum ceria,
 Tim Medikids`,
 
   /* Pesan TANPA promo (IBK) */
   PESAN_WA_IBK:
-`Hai Parents, orang tua dari {nama} 👋, 
-terima kasih sudah berkunjung ke {cabang} pada {tgl}! 🦷✨ 
+`Hai Parents, orang tua dari {nama} \u{1F44B}, 
+terima kasih sudah berkunjung ke {cabang} pada {tgl}! \u{1F9B7}\u{2728} 
 
 Ini Rapor Gigi {nama}. Silahkan buka link berikut untuk melihat hasil pemeriksaan lengkapnya :
 
 {link}
 
-Jika ada yang ingin ditanyakan atau butuh bantuan lebih lanjut, Parents bisa langsung balas pesan ini ya. Kami siap membantu! 🥰
+Jika ada yang ingin ditanyakan atau butuh bantuan lebih lanjut, Parents bisa langsung balas pesan ini ya. Kami siap membantu! \u{1F970}
 
 Salam sehat dan senyum ceria,
 Tim Medikids`,
