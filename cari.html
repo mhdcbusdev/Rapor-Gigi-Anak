@@ -144,7 +144,7 @@ select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,
 
 </div>
 
-<script src="config.js?v=5"></script>
+<script src="config.js?v=7"></script>
 <script>
 /* ======================================================================
    ===========================  KONFIGURASI  ============================
@@ -357,11 +357,7 @@ function tampilkan(hasil){
   $("#kartuHasil").classList.remove("hide");
   totalItem=0; sudahKirim=0; updateHitung();
 
-  // sembunyikan cabang uji-coba dari hasil (bisa ditambah di config.js: CABANG_SEMBUNYI)
-  const CABANG_SEMBUNYI = CONFIG.CABANG_SEMBUNYI || ["Medikids Test"];
-  const daftar = (hasil.hasil || []).filter(function(r){
-    return CABANG_SEMBUNYI.indexOf(String(r.cabang||"").trim()) === -1;
-  });
+  const daftar = hasil.hasil || [];
 
   if(!daftar.length){
     box.appendChild(el("div","kosong","Tidak ada rapor yang cocok. Coba longgarkan filternya."));
