@@ -14,7 +14,7 @@ window.MHDC_CONFIG = {
      Apps Script > Deploy > Manage deployments > lihat deployment yang
      Active > salin "Web app URL"
      ------------------------------------------------------------------ */
-  API_URL: "https://script.google.com/macros/s/AKfycbxFaBKKwkxei3-2BZ4-DKh4vwlROqZVRDrTNVDbWlMa4novRL4FLR2ulFBVwwMx0YtmfQ/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbzjYckzp-C8ugqdxL6jJQa4a1XUuwz--U1BhDtGWxsm769S8-J_RfHM6val2bOZWyqw/exec",
 
   /* 2) Alamat halaman rapor. Harus sama dengan RAPOR_BASE di watzap.gs */
   RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id=",
