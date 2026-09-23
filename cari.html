@@ -158,8 +158,10 @@ const CONFIG = {
   ACCESS_KEY: "5698d533-1f90-4d76-bd1f-555ea054c324",
   RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id=",
 
-  // Cadangan template pesan. Yang dipakai tetap isi config.js (PESAN_WA).
-  PESAN_WA: "Halo Ayah/Bunda 😊\n\nBerikut Rapor Gigi *{nama}* (periksa {tgl}):\n{link}\n\n— Medikids"
+  // Cadangan template pesan. Yang dipakai tetap isi config.js.
+  PROMO_URL: "https://mhdc.co.id/wp-content/uploads/Promo-Diskon-Rapor-Gigi-Anak.pdf",
+  PESAN_WA: "Hai Parents, orang tua dari {nama} 👋,\nterima kasih sudah berkunjung ke {cabang} hari ini! 🦷✨\n\nIni Rapor Gigi {nama}. Silahkan buka link berikut :\n\n{link}\n\n✨Klaim *PROMO SPESIAL RAPOR GIGI*, klik link ini ⬇\n{promo}\n\nSalam sehat dan senyum ceria,\nTim Medikids",
+  PESAN_WA_IBK: "Hai Parents, orang tua dari {nama} 👋,\nterima kasih sudah berkunjung ke {cabang} hari ini! 🦷✨\n\nIni Rapor Gigi {nama}. Silahkan buka link berikut :\n\n{link}\n\nSalam sehat dan senyum ceria,\nTim Medikids"
 };
 
 /* Nilai di atas hanya cadangan. Yang dipakai adalah isi config.js. */
@@ -235,14 +237,19 @@ function waNomor(hp){
   return s;
 }
 
-/* ---------- isi template pesan dari config.js ---------- */
+/* ---------- isi template pesan dari config.js ----------
+   IBK -> tanpa promo (PESAN_WA_IBK). Lainnya -> dengan promo (PESAN_WA). */
 function buatPesan(r){
-  const tpl=CONFIG.PESAN_WA || "Halo, berikut rapor gigi {nama}: {link}";
+  var kat = String(r.kategori||"").trim();
+  var tpl = (kat==="IBK" && CONFIG.PESAN_WA_IBK)
+              ? CONFIG.PESAN_WA_IBK
+              : (CONFIG.PESAN_WA || "Halo, berikut rapor gigi {nama}: {link}");
   return tpl
     .replace(/\{nama\}/g,   r.nama   || "")
     .replace(/\{tgl\}/g,    tglIndo(r.tgl))
     .replace(/\{cabang\}/g, r.cabang || "")
     .replace(/\{dokter\}/g, r.dokter || "")
+    .replace(/\{promo\}/g,  CONFIG.PROMO_URL || "")
     .replace(/\{link\}/g,   CONFIG.RAPOR_BASE + r.id);
 }
 
