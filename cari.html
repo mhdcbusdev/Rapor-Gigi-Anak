@@ -56,8 +56,27 @@ input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,4
 .btn.ghost:hover{border-color:var(--navy-soft)}
 .btn.hijau{background:var(--mint);color:#fff}
 .btn.hijau:hover{background:#0E9E90}
+.btn.mati{background:#D9C7BE !important;color:#fff;cursor:not-allowed}
+.btn.mati:hover{background:#D9C7BE}
 
 .status{font-size:13px;color:var(--navy-soft);margin-top:10px;font-weight:500;min-height:18px}
+
+.filter-grid{display:grid;gap:12px}
+@media(min-width:600px){.filter-grid{grid-template-columns:1fr 1fr}}
+.f label{font-size:13px;font-weight:600;display:block;margin-bottom:6px}
+select{width:100%;padding:12px 13px;font:inherit;font-size:15px;color:var(--navy);
+  background:#FFFDFB;border:1.5px solid var(--line-strong);border-radius:10px;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235C7395' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,49,39,.14)}
+
+.hitung{font-size:13px;font-weight:700;color:var(--navy);background:var(--mint-soft);
+  border:1px solid #BFEDE7;border-radius:9px;padding:8px 12px;margin-bottom:12px;display:none}
+.hitung.tampil{display:block}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:var(--red-dark);background:var(--red-soft);
+  border-radius:6px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+.item.selesai{opacity:.62}
+.item.selesai .nm{color:var(--navy-soft)}
 
 .hasil{display:flex;flex-direction:column;gap:10px}
 .item{border:1.5px solid var(--line-strong);border-radius:12px;padding:14px;background:#FFFDFB}
@@ -79,7 +98,7 @@ input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,4
   <div class="topbar-inner">
     <div>
       <h1>Cari Rapor Gigi</h1>
-      <div class="sub">Untuk CRO &amp; anak klinik — Medikids</div>
+      <div class="sub">Untuk CRO &amp; klinik — Medikids</div>
     </div>
     <div class="badge">Kirim ulang rapor</div>
   </div>
@@ -92,16 +111,34 @@ input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,4
   </div>
 
   <div class="card" id="kartuCari">
-    <label for="q">Nama pasien</label>
-    <div class="cari-row">
-      <input type="search" id="q" placeholder="Ketik sebagian nama, contoh: aisyah" autocomplete="off">
-      <button class="btn primary" id="btnCari">Cari</button>
+    <div class="filter-grid">
+      <div class="f">
+        <label for="fCabang">Klinik cabang</label>
+        <select id="fCabang"></select>
+      </div>
+      <div class="f">
+        <label for="fKategori">Kategori kunjungan</label>
+        <select id="fKategori">
+          <option value="">— Semua kategori —</option>
+          <option>First Dental Visit</option>
+          <option>Field Trip</option>
+          <option>IBK</option>
+        </select>
+      </div>
     </div>
-    <div class="hint" style="margin-top:8px">Minimal 3 huruf. Hasil terbaru muncul paling atas.</div>
+    <div class="f" style="margin-top:12px">
+      <label for="q">Nama pasien <span class="hint" style="font-weight:500">(opsional)</span></label>
+      <div class="cari-row">
+        <input type="search" id="q" placeholder="Kosongkan untuk tampilkan semua di klinik/kategori itu" autocomplete="off">
+        <button class="btn primary" id="btnCari">Cari</button>
+      </div>
+    </div>
+    <div class="hint" style="margin-top:8px">Pilih minimal <b>klinik</b> atau <b>kategori</b>, atau ketik nama (min. 3 huruf). Hasil terbaru di atas.</div>
     <div class="status" id="status"></div>
   </div>
 
   <div class="card hide" id="kartuHasil">
+    <div class="hitung" id="hitung"></div>
     <div class="hasil" id="hasil"></div>
   </div>
 
@@ -119,7 +156,10 @@ const CONFIG = {
 
   // Alamat halaman rapor, dipakai untuk tombol "Buka rapor"
   ACCESS_KEY: "5698d533-1f90-4d76-bd1f-555ea054c324",
-  RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id="
+  RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id=",
+
+  // Cadangan template pesan. Yang dipakai tetap isi config.js (PESAN_WA).
+  PESAN_WA: "Halo Ayah/Bunda 😊\n\nBerikut Rapor Gigi *{nama}* (periksa {tgl}):\n{link}\n\n— Medikids"
 };
 
 /* Nilai di atas hanya cadangan. Yang dipakai adalah isi config.js. */
@@ -148,18 +188,62 @@ const BULAN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus",
 
 if(!CONFIG.API_URL) $("#cfgWarn").classList.remove("hide");
 
+/* Daftar klinik cabang — nama harus sama persis dengan yang tersimpan di Sheet.
+   Kalau ada cabang baru, cukup tambahkan namanya di sini. */
+const DAFTAR_CABANG = CONFIG.DAFTAR_CABANG || [
+  "Medikids Batam","Medikids Bekasi","Medikids Bintaro","Medikids Bogor","Medikids BSD",
+  "Medikids Cibinong","Medikids Cibubur","Medikids Cikarang","Medikids Cikupa","Medikids Cilegon",
+  "Medikids Cipondoh","Medikids Dago","Medikids Depok","Medikids Grand Wisata","Medikids Green Terrace",
+  "Medikids JGC","Medikids Kalimalang","Medikids Karawaci","Medikids Karawang","Medikids Kebon Jeruk",
+  "Medikids Kemang","Medikids Lebak Bulus","Medikids Makassar","Medikids Malang","Medikids Padang",
+  "Medikids Palembang","Medikids Pancoran Mas","Medikids Pekanbaru","Medikids Pondok Indah","Medikids Rawamangun",
+  "Medikids Rempoa","Medikids RSBL","Medikids Sawangan","Medikids Semarang","Medikids Serpong",
+  "Medikids Solo","Medikids Sunter","Medikids Surabaya"
+];
+(function isiCabang(){
+  const sel=document.querySelector("#fCabang");
+  sel.innerHTML="";
+  const o0=document.createElement("option"); o0.value=""; o0.textContent="— Semua klinik —"; sel.appendChild(o0);
+  DAFTAR_CABANG.forEach(nm=>{ const o=document.createElement("option"); o.value=nm; o.textContent=nm; sel.appendChild(o); });
+})();
+
 function tglIndo(v){
   const m=String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})/);
   if(!m) return String(v||"-");
   return parseInt(m[3],10)+" "+BULAN[parseInt(m[2],10)-1]+" "+m[1];
 }
-$("#q").focus();
+document.querySelector("#fCabang").focus();
 
 function el(tag,cls,teks){
   const n=document.createElement(tag);
   if(cls) n.className=cls;
   if(teks!==undefined) n.textContent=teks;
   return n;
+}
+
+/* ---------- nomor WA -> format internasional 62... ---------- */
+function waNomor(hp){
+  let s=String(hp||"").replace(/\D/g,"");      // ambil angka saja
+  if(!s) return "";
+  if(s.startsWith("62")){                        // sudah 62...
+    if(s.charAt(2)==="0") s="62"+s.slice(3);      // buang 0 nyasar (6208...)
+  } else if(s.startsWith("0")){
+    s="62"+s.slice(1);                            // 08... -> 628...
+  } else if(s.startsWith("8")){
+    s="62"+s;                                     // 8... -> 628...
+  }
+  return s;
+}
+
+/* ---------- isi template pesan dari config.js ---------- */
+function buatPesan(r){
+  const tpl=CONFIG.PESAN_WA || "Halo, berikut rapor gigi {nama}: {link}";
+  return tpl
+    .replace(/\{nama\}/g,   r.nama   || "")
+    .replace(/\{tgl\}/g,    tglIndo(r.tgl))
+    .replace(/\{cabang\}/g, r.cabang || "")
+    .replace(/\{dokter\}/g, r.dokter || "")
+    .replace(/\{link\}/g,   CONFIG.RAPOR_BASE + r.id);
 }
 
 /* ---------- panggil Apps Script (fetch, lalu JSONP kalau diblokir) ---------- */
@@ -217,15 +301,24 @@ function bacaMasalah(teks, status){
 const btn=$("#btnCari");
 async function cari(){
   const q=$("#q").value.trim();
-  if(q.length<3){
-    $("#status").textContent="Ketik minimal 3 huruf nama pasien.";
+  const cabang=$("#fCabang").value;
+  const kategori=$("#fKategori").value;
+
+  // boleh cari kalau: pilih klinik, ATAU pilih kategori, ATAU nama >= 3 huruf
+  if(!cabang && !kategori && q.length<3){
+    $("#status").textContent="Pilih klinik atau kategori dulu, atau ketik minimal 3 huruf nama.";
     return;
   }
+  if(q && q.length<3){
+    $("#status").textContent="Nama minimal 3 huruf (atau kosongkan saja).";
+    return;
+  }
+
   btn.disabled=true; btn.textContent="Mencari…";
-  $("#status").textContent="Mencari data pasien…";
+  $("#status").textContent="Mencari data…";
   $("#kartuHasil").classList.add("hide");
   try{
-    const hasil=await panggil({aksi:"cari", q:q});
+    const hasil=await panggil({aksi:"cari", q:q, cabang:cabang, kategori:kategori});
     if(!hasil || !hasil.ok){
       $("#status").textContent=(hasil && hasil.error) ? hasil.error : "Pencarian gagal. Coba lagi.";
       return;
@@ -239,23 +332,39 @@ async function cari(){
 }
 btn.addEventListener("click",cari);
 $("#q").addEventListener("keydown",e=>{ if(e.key==="Enter") cari(); });
+$("#fCabang").addEventListener("change",cari);
+$("#fKategori").addEventListener("change",cari);
+
+/* penghitung "sudah dikirim" untuk batch */
+let totalItem=0, sudahKirim=0;
+function updateHitung(){
+  const h=$("#hitung");
+  if(!totalItem){ h.classList.remove("tampil"); return; }
+  h.classList.add("tampil");
+  h.textContent="Terkirim "+sudahKirim+" dari "+totalItem+" rapor";
+}
 
 function tampilkan(hasil){
   const box=$("#hasil");
   box.innerHTML="";
   $("#kartuHasil").classList.remove("hide");
+  totalItem=0; sudahKirim=0; updateHitung();
 
   if(!hasil.hasil.length){
-    box.appendChild(el("div","kosong","Tidak ada pasien dengan nama itu. Coba potong namanya lebih pendek."));
+    box.appendChild(el("div","kosong","Tidak ada rapor yang cocok. Coba longgarkan filternya."));
     $("#status").textContent="";
     return;
   }
+  totalItem=hasil.hasil.length;
+  updateHitung();
   $("#status").textContent = hasil.hasil.length + " rapor ditemukan" +
-    (hasil.lebih ? " (ditampilkan 15 terbaru — ketik nama lebih lengkap kalau belum ketemu)" : "");
+    (hasil.lebih ? " (ditampilkan sebagian — perkecil dengan pilih klinik/kategori atau ketik nama)" : "");
 
   hasil.hasil.forEach(r=>{
     const it=el("div","item");
-    it.appendChild(el("div","nm", r.nama));
+    const nm=el("div","nm", r.nama);
+    if(r.kategori){ const tg=el("span","tag",r.kategori); nm.appendChild(tg); }
+    it.appendChild(nm);
 
     const m1=el("div","meta");
     m1.append(document.createTextNode("Periksa "), el("b",null,tglIndo(r.tgl)));
@@ -288,32 +397,48 @@ function tampilkan(hasil){
     });
     aksi.appendChild(salin);
 
-    const kirim=el("button","btn hijau kecil","Kirim ke orang tua");
-    kirim.type="button";
+    // pesan siap kirim (nama + link rapor + promo dari config.js)
+    const pesan = buatPesan(r);
+    const nomor = waNomor(r.hp);
+
     const kabar=el("div","kabar");
-    kirim.addEventListener("click",async()=>{
-      if(!confirm("Kirim link rapor "+r.nama+" ke nomor "+r.hp+" lewat WhatsApp?")) return;
-      kirim.disabled=true; kirim.textContent="Mengirim…";
-      kabar.classList.remove("tampil","gagal");
-      try{
-        const h=await panggil({aksi:"kirim", id:r.id});
-        if(h && h.ok){
-          it.classList.add("terkirim");
-          kabar.textContent="Terkirim ke "+h.ke;
-          kabar.classList.add("tampil");
-          kirim.textContent="Sudah dikirim";
-        } else {
-          kabar.textContent=(h && h.error) ? h.error : "Pengiriman gagal.";
-          kabar.classList.add("tampil","gagal");
-          kirim.disabled=false; kirim.textContent="Kirim ke orang tua";
+
+    // Tombol utama: buka WhatsApp CRO dengan pesan sudah terisi
+    const kirim=el("a","btn hijau kecil","Kirim via WhatsApp");
+    kirim.style.textDecoration="none";
+    kirim.target="_blank"; kirim.rel="noopener";
+    if(nomor){
+      kirim.href="https://wa.me/"+nomor+"?text="+encodeURIComponent(pesan);
+      kirim.addEventListener("click",()=>{
+        if(!it.classList.contains("selesai")){
+          it.classList.add("selesai"); sudahKirim++; updateHitung();
         }
-      }catch(e){
-        kabar.textContent="Gagal menghubungi server. Coba lagi.";
+        it.classList.add("terkirim");
+        kabar.textContent="WhatsApp dibuka — tinggal tekan Kirim di WA ke "+nomor;
+        kabar.classList.remove("gagal"); kabar.classList.add("tampil");
+        kirim.textContent="Kirim lagi";
+      });
+    } else {
+      // tidak ada nomor -> tombol nonaktif, arahkan pakai "Salin pesan"
+      kirim.classList.add("mati");
+      kirim.href="#";
+      kirim.addEventListener("click",(e)=>{
+        e.preventDefault();
+        kabar.textContent="Nomor HP kosong. Pakai \u201CSalin pesan\u201D, lalu tempel manual di WhatsApp.";
         kabar.classList.add("tampil","gagal");
-        kirim.disabled=false; kirim.textContent="Kirim ke orang tua";
-      }
-    });
+      });
+    }
     aksi.appendChild(kirim);
+
+    // Cadangan: salin isi pesan (kalau nomor perlu dibetulin / kirim dari HP lain)
+    const salinPesan=el("button","btn ghost kecil","Salin pesan");
+    salinPesan.type="button";
+    salinPesan.addEventListener("click",async()=>{
+      try{ await navigator.clipboard.writeText(pesan); salinPesan.textContent="Pesan tersalin"; }
+      catch(e){ salinPesan.textContent="Gagal menyalin"; }
+      setTimeout(()=>salinPesan.textContent="Salin pesan",2000);
+    });
+    aksi.appendChild(salinPesan);
 
     it.appendChild(aksi);
     it.appendChild(kabar);
