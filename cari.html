@@ -144,7 +144,7 @@ select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,
 
 </div>
 
-<script src="config.js"></script>
+<script src="config.js?v=3"></script>
 <script>
 /* ======================================================================
    ===========================  KONFIGURASI  ============================
@@ -152,7 +152,7 @@ select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(228,
 const CONFIG = {
 
   // URL Web App Apps Script — sama dengan yang dipakai di input.html
-  API_URL: "https://script.google.com/macros/s/AKfycbzJ043Mfmi_bRxQvYbMvSCIs8blryDwV9OPhZVBZ23J7yaROXWb04BAe8J3pWTJjeUv2Q/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbw0pGT_40DsoY3cDV9JbJuOy2K02aaCZcplOcCMkOVJxFyAa-NxpaRYRXfuNWJwOk95AA/exec",
 
   // Alamat halaman rapor, dipakai untuk tombol "Buka rapor"
   ACCESS_KEY: "5698d533-1f90-4d76-bd1f-555ea054c324",
@@ -193,7 +193,7 @@ if(!CONFIG.API_URL) $("#cfgWarn").classList.remove("hide");
 /* Daftar klinik cabang — nama harus sama persis dengan yang tersimpan di Sheet.
    Kalau ada cabang baru, cukup tambahkan namanya di sini. */
 const DAFTAR_CABANG = CONFIG.DAFTAR_CABANG || [
-  "Medikids Test","Medikids Batam","Medikids Bekasi","Medikids Bintaro","Medikids Bogor","Medikids BSD",
+  "Medikids Batam","Medikids Bekasi","Medikids Bintaro","Medikids Bogor","Medikids BSD",
   "Medikids Cibinong","Medikids Cibubur","Medikids Cikarang","Medikids Cikupa","Medikids Cilegon",
   "Medikids Cipondoh","Medikids Dago","Medikids Depok","Medikids Grand Wisata","Medikids Green Terrace",
   "Medikids JGC","Medikids Kalimalang","Medikids Karawaci","Medikids Karawang","Medikids Kebon Jeruk",
