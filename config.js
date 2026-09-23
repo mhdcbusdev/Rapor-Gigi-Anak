@@ -34,31 +34,44 @@ window.MHDC_CONFIG = {
         Kosongkan ("") kalau tombolnya tidak dipakai. */
   WA_CRO: "",
 
-  /* 5b) TEMPLATE PESAN WHATSAPP (dikirim MANUAL oleh CRO dari halaman cari.html)
-         Ganti isi promo di sini saja. Placeholder yang bisa dipakai:
-           {nama}   -> nama pasien
-           {tgl}    -> tanggal periksa (contoh: 12 September 2026)
-           {cabang} -> nama cabang
-           {dokter} -> nama dokter
-           {link}   -> link rapor gigi
-         Baris kosong = jarak antar paragraf. Emoji boleh. */
-  PESAN_WA:
-`Halo Ayah/Bunda 😊
+  /* 5b) TEMPLATE PESAN WHATSAPP (dikirim MANUAL oleh CRO dari cari.html)
+         Isinya mengikuti watzap.gs. Aturan: First Dental Visit & Field Trip
+         pakai PESAN_WA (ada promo); IBK pakai PESAN_WA_IBK (tanpa promo).
+         Placeholder: {nama} {cabang} {tgl} {dokter} {link} {promo} */
 
-Terima kasih sudah merawat gigi si kecil di Medikids {cabang}. Berikut Rapor Gigi *{nama}* dari pemeriksaan tanggal {tgl}:
+  /* Link promo — dipakai untuk mengganti {promo} */
+  PROMO_URL: "https://mhdc.co.id/wp-content/uploads/Promo-Diskon-Rapor-Gigi-Anak.pdf",
+
+  /* Pesan DENGAN promo (First Dental Visit & Field Trip) */
+  PESAN_WA:
+`Hai Parents, orang tua dari {nama} 👋, 
+terima kasih sudah berkunjung ke {cabang} pada {tgl}! 🦷✨ 
+
+Ini Rapor Gigi {nama}. Silahkan buka link berikut untuk melihat hasil pemeriksaan lengkapnya :
 
 {link}
 
-Rapornya bisa dibuka kapan aja ya, Bun 🦷✨
+✨Klaim *PROMO SPESIAL RAPOR GIGI*, klik link ini ⬇
+{promo}
 
-━━━━━━━━━━━━
-🎁 *PROMO BULAN INI*
-[ tulis detail promo di sini — mis. diskon scaling / fluoride / gratis kontrol berikutnya ]
-Info & booking bisa langsung balas chat ini ya 🙌
-━━━━━━━━━━━━
+Jika ada yang ingin ditanyakan atau butuh bantuan lebih lanjut, Parents bisa langsung balas pesan ini ya. Kami siap membantu! 🥰
 
-Sampai jumpa di kunjungan berikutnya!
-— Medikids`,
+Salam sehat dan senyum ceria,
+Tim Medikids`,
+
+  /* Pesan TANPA promo (IBK) */
+  PESAN_WA_IBK:
+`Hai Parents, orang tua dari {nama} 👋, 
+terima kasih sudah berkunjung ke {cabang} pada {tgl}! 🦷✨ 
+
+Ini Rapor Gigi {nama}. Silahkan buka link berikut untuk melihat hasil pemeriksaan lengkapnya :
+
+{link}
+
+Jika ada yang ingin ditanyakan atau butuh bantuan lebih lanjut, Parents bisa langsung balas pesan ini ya. Kami siap membantu! 🥰
+
+Salam sehat dan senyum ceria,
+Tim Medikids`,
 
   /* 6) Link video edukasi di halaman rapor (opsional) */
   VIDEO: {
