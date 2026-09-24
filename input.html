@@ -129,6 +129,10 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
 .cek-klinik .hd{display:block;font-weight:800;margin-bottom:4px;font-size:13px}
 .cek-klinik .no{font-weight:800}
 .cek-klinik a{color:var(--red-dark);font-weight:800;text-decoration:none;white-space:nowrap}
+.cek-klinik #croCek{display:block;margin-top:10px}
+.cek-klinik #croCek a{display:inline-block;background:#25D366;color:#fff;font-weight:800;
+  text-decoration:none;white-space:normal;padding:9px 14px;border-radius:9px;font-size:13px;line-height:1.3}
+.cek-klinik #croCek a:hover{background:#1EBE5A}
 .hide{display:none !important}
 </style>
 </head>
@@ -137,15 +141,14 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
 <div class="overlay hide" id="done">
   <div class="box">
     <div class="tick">&#10003;</div>
-    <h2>Rapor terkirim</h2>
-    <p>Data masuk Google Sheet, dan WhatsApp otomatis dikirim ke nomor orang tua serta nomor klinik.</p>
+    <h2>Rapor tersimpan</h2>
+    <p>Data sudah masuk ke Google Sheet. <b>Rapor tidak dikirim otomatis</b> &mdash; pengiriman ke pasien dilakukan manual oleh tim CRO.</p>
     <div class="recap" id="recap"></div>
     <div class="cek-klinik">
-      <span class="hd">&#9888; Untuk staf klinik — cek notifikasi WhatsApp</span>
-      Rapor ini harusnya juga masuk ke WhatsApp klinik <span class="no" id="waKlinikCek">&mdash;</span>.
-      Kalau notifikasinya <b>tidak masuk</b> ke nomor klinik, berarti pengiriman gagal walaupun layar ini
-      sudah muncul. <b>Hold dulu &mdash; jangan kirim rapor berikutnya</b>, lalu hubungi BD Support
-      <a href="https://wa.me/6285171087351" target="_blank" rel="noopener">0851-7108-7351</a> untuk cek koneksi.
+      <span class="hd">&#128241; Langkah berikutnya &mdash; info ke CRO</span>
+      Setelah rapor tersimpan, <b>kabari tim CRO</b> untuk mengirim rapor ini ke nomor pasien.
+      Jangan lupa sebutkan <b>kategori kunjungannya</b>: <span class="no" id="katCek">&mdash;</span>.
+      <span class="no" id="croCek"></span>
     </div>
     <button class="btn primary" style="width:100%" id="nextPatient">Isi pasien berikutnya</button>
     <button class="btn ghost" style="width:100%;margin-top:8px" id="resetAll">Mulai dari kosong</button>
@@ -175,7 +178,7 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
     <!-- ============ 1. PASIEN ============ -->
     <section class="card">
       <div class="sec-head"><div class="sec-num">1</div><h2>Data pasien</h2></div>
-      <p class="sec-desc">Nomor HP orang tua dipakai untuk mengirim link rapor via WhatsApp.</p>
+      <p class="sec-desc">Nomor HP orang tua dipakai CRO untuk mengirim link rapor via WhatsApp.</p>
       <div class="grid two">
         <div class="f span">
           <label class="req" for="nama">Nama pasien</label>
@@ -348,7 +351,7 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
 
 <div class="bar">
   <div class="bar-inner">
-    <div class="status" id="status">Periksa lagi sebelum kirim — WhatsApp langsung terkirim ke orang tua.</div>
+    <div class="status" id="status">Periksa lagi sebelum simpan. Rapor dikirim ke pasien secara manual oleh CRO.</div>
     <button class="btn primary" id="submitBtn">Kirim rapor gigi</button>
   </div>
 </div>
@@ -359,17 +362,9 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
    ===========================  KONFIGURASI  ============================
    ====================================================================== */
 const CONFIG = {
-
-  // 1) WAJIB DIISI. URL Web App Apps Script (Deploy > Manage deployments).
-  //    Contoh: "https://script.google.com/macros/s/AKfycb..../exec"
   API_URL: "https://script.google.com/macros/s/AKfycbzJ043Mfmi_bRxQvYbMvSCIs8blryDwV9OPhZVBZ23J7yaROXWb04BAe8J3pWTJjeUv2Q/exec",
-
-  // 2) Jangan diubah — harus sama dengan yang ada di Google Sheet
   FORM_ID: "ca374c5",
   FORM_NAME: "Form Rapor Gigi Anak",
-
-  // 3) Alamat halaman rapor (index.html) di GitHub Pages.
-  //    WAJIB sama dengan RAPOR_BASE di watzap.gs, dan diakhiri '?id='
   ACCESS_KEY: "5698d533-1f90-4d76-bd1f-555ea054c324",
   RAPOR_BASE: "https://mhdcbusdev.github.io/Rapor-Gigi-Anak/?id="
 };
@@ -377,7 +372,6 @@ const CONFIG = {
 /* Nilai di atas hanya cadangan. Yang dipakai adalah isi config.js. */
 if(window.MHDC_CONFIG) Object.assign(CONFIG, window.MHDC_CONFIG);
 
-/* config.js wajib termuat. Kalau tidak, semua pengaturan ikut kosong. */
 if(!window.MHDC_CONFIG){
   document.addEventListener("DOMContentLoaded",function(){
     var d=document.createElement("div");
@@ -388,7 +382,6 @@ if(!window.MHDC_CONFIG){
     document.body.insertBefore(d, document.body.firstChild);
   });
 }
-
 
 // Nomor WhatsApp tiap cabang, format sama seperti di Sheet (tanpa 62 di depan).
 const CABANG = {
@@ -531,11 +524,6 @@ $$("[data-gigi]").forEach(wrap=>{
   input.addEventListener("input",sinkron);
 });
 
-/* ---------- Rapor ID (memakai nama pasien) ----------
-   Bentuknya: 2026-06-03-Rapor-Gigi-Tanahrum-Abdalla-Sasongko-K7M2XQ9F
-   8 huruf di belakang wajib ada supaya pasien dengan nama sama
-   (atau kunjungan kedua di hari yang sama) tidak saling tertukar,
-   dan supaya link orang lain tidak bisa ditebak begitu saja.        */
 let KODE_UNIK="";
 function kodeAcak(n){
   const huruf="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -561,7 +549,6 @@ function updateLinkPrev(){
   $("#linkPrev").textContent = CONFIG.RAPOR_BASE+raporIdSekarang();
 }
 
-/* ---------- tanggal & nomor HP ---------- */
 function hariIniJakarta(){ return new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Jakarta"}); }
 function tambahHari(iso,n){ const d=new Date(iso+"T00:00:00"); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
 function rapikanNomorHP(v){
@@ -572,7 +559,6 @@ function rapikanNomorHP(v){
   return "62"+s.replace(/^0+/,"");
 }
 
-/* ---------- dropdown cabang ---------- */
 const selCabang=$("#cabang");
 selCabang.insertAdjacentHTML("beforeend",'<option value="">— pilih cabang —</option>');
 Object.keys(CABANG).forEach(n=>selCabang.insertAdjacentHTML("beforeend","<option>"+n+"</option>"));
@@ -581,7 +567,6 @@ selCabang.addEventListener("change",()=>{
   $("#cabangPrev").textContent="No WA klinik: "+(no||"—");
 });
 
-/* ---------- radio & checkbox ---------- */
 $$(".opts[data-key]").forEach(box=>{
   const key=box.dataset.key;
   const type=box.dataset.type==="radio"?"radio":"checkbox";
@@ -599,14 +584,12 @@ $$(".opts[data-key]").forEach(box=>{
     tandaiBeres(box);
   });
 });
-// "Lainnya" hanya dipakai untuk memunculkan kolom, tidak ikut ditulis ke Sheet
 const NILAI_PEMICU = ["Lainnya"];
 function nilaiOpts(box){
   return $$("input:checked",box).map(i=>i.value)
     .filter(v=>!NILAI_PEMICU.includes(v)).join(", ");
 }
 
-/* ---------- kolom yang tampil sesuai tindakan yang dicentang ---------- */
 const boxTindakan = $('.opts[data-key="Tindakan hari ini"]');
 function terapkanKondisi(){
   const dicentang = $$("input:checked", boxTindakan).map(i=>i.value);
@@ -614,7 +597,6 @@ function terapkanKondisi(){
     const tampil = dicentang.includes(w.dataset.muncul);
     w.classList.toggle("hide", !tampil);
     if(!tampil){
-      // kolom yang disembunyikan dikosongkan, supaya tidak ada sisa data terkirim
       $$("input[data-key]", w).forEach(i=>{
         if(i.value){ i.value=""; i.dispatchEvent(new Event("input")); }
       });
@@ -623,7 +605,6 @@ function terapkanKondisi(){
 }
 boxTindakan.addEventListener("change", terapkanKondisi);
 
-/* ---------- preview kecil ---------- */
 $("#hp").addEventListener("input",()=>{
   const n=rapikanNomorHP($("#hp").value);
   $("#hpPrev").textContent="Akan dikirim ke: "+(n||"—");
@@ -643,7 +624,6 @@ $("#periksa").addEventListener("change",hitungUsia);
 $("#nama").addEventListener("input",updateLinkPrev);
 $("#periksa").addEventListener("change",updateLinkPrev);
 
-/* ---------- tombol tanggal cepat ---------- */
 $$(".quick button").forEach(b=>{
   b.addEventListener("click",()=>{
     $("#nextVisit").value=tambahHari($("#periksa").value||hariIniJakarta(),+b.dataset.add);
@@ -651,7 +631,6 @@ $$(".quick button").forEach(b=>{
   });
 });
 
-/* ---------- validasi ---------- */
 function pesanErrDari(el){ const f=el.closest(".f"); return f?$(".err-msg",f):null; }
 function tandaiBeres(el){
   el.classList.remove("bad");
@@ -675,7 +654,6 @@ function validasi(){
   return !pertama;
 }
 
-/* ---------- kumpulkan data ---------- */
 function rapikanNomorGigi(v){ return pecahGigi(v).join(", "); }
 function ambilData(){
   const d={};
@@ -696,7 +674,6 @@ function ambilData(){
   return d;
 }
 
-/* ---------- kirim ---------- */
 const btn=$("#submitBtn");
 btn.addEventListener("click",async()=>{
   if(!CONFIG.API_URL){
@@ -709,7 +686,7 @@ btn.addEventListener("click",async()=>{
 
   const data=ambilData();
   btn.disabled=true; btn.textContent="Mengirim…";
-  $("#status").textContent="Mengirim data ke Google Sheet…";
+  $("#status").textContent="Menyimpan data ke Google Sheet…";
   try{
     const body=new URLSearchParams();
     Object.entries(data).forEach(([k,v])=>body.append(k,v==null?"":v));
@@ -717,7 +694,7 @@ btn.addEventListener("click",async()=>{
     await fetch(CONFIG.API_URL,{method:"POST",mode:"no-cors",body});
     tampilkanSukses(data);
   }catch(e){
-    $("#status").textContent="Gagal mengirim. Cek koneksi internet, lalu tekan Kirim lagi.";
+    $("#status").textContent="Gagal menyimpan. Cek koneksi internet, lalu tekan Kirim lagi.";
     btn.disabled=false; btn.textContent="Kirim rapor gigi";
   }
 });
@@ -733,13 +710,28 @@ function tampilkanSukses(d){
     const s2=document.createElement("span"); s2.textContent=b; s2.style.wordBreak="break-all";
     row.append(s1,s2); $("#recap").appendChild(row);
   });
-  $("#waKlinikCek").textContent = d["nomorklinik"] ? "0"+d["nomorklinik"] : "(nomor klinik belum diatur)";
+  $("#katCek").textContent = d["Kategori"] || "\u2014";
+  var _cro=String(CONFIG.WA_CRO||"").replace(/\D/g,"");
+  var _croBox=$("#croCek");
+  _croBox.innerHTML="";
+  if(_cro){
+    var _teks="Halo CRO, mohon dibantu kirim rapor gigi berikut ke pasien:\n\n"+
+      "Nama: "+(d["Nama Pasien"]||"")+"\n"+
+      "No HP: "+(d["No HP"]||"")+"\n"+
+      "Cabang: "+(d["Klinik Cabang"]||"")+"\n"+
+      "Kategori: "+(d["Kategori"]||"")+"\n"+
+      "Link rapor: "+link;
+    var _a=document.createElement("a");
+    _a.href="https://wa.me/"+_cro+"?text="+encodeURIComponent(_teks);
+    _a.target="_blank"; _a.rel="noopener";
+    _a.textContent="\uD83D\uDCF2 Info ke CRO sekarang (buka WhatsApp)";
+    _croBox.appendChild(_a);
+  }
   $("#done").classList.remove("hide");
   btn.disabled=false; btn.textContent="Kirim rapor gigi";
-  $("#status").textContent="Data terakhir berhasil dikirim.";
+  $("#status").textContent="Data terakhir berhasil disimpan.";
 }
 
-/* ---------- pasien berikutnya / reset ---------- */
 $("#nextPatient").addEventListener("click",()=>{
   const s={cabang:$("#cabang").value,dokter:$("#dokter").value,
            periksa:$("#periksa").value,kategori:$("#kategori").value};
@@ -769,7 +761,6 @@ function bersihkan(){
   segarkanRaporId();
 }
 
-/* ---------- nilai awal ---------- */
 $("#periksa").value=hariIniJakarta();
 terapkanKondisi();
 segarkanRaporId();
