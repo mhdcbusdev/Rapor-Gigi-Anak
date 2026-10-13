@@ -158,20 +158,12 @@ input.bad,select.bad,textarea.bad{border-color:var(--red);background:#FFF7F6}
 <div class="overlay hide" id="done">
   <div class="box">
     <div class="tick">&#10003;</div>
-    <h2>Rapor tersimpan &amp; sedang dikirim</h2>
-    <p>Data sudah masuk ke Google Sheet. Rapor <b>dikirim otomatis via WhatsApp</b> dalam beberapa saat.</p>
+    <h2>Rapor tersimpan</h2>
     <div class="recap" id="recap"></div>
     <div class="auto-wa">
-      <span class="hd">&#9989; WhatsApp otomatis dikirim ke:</span>
-      <ul>
-        <li>Orang tua pasien: <span class="no" id="waOrtu">&mdash;</span></li>
-        <li>Klinik cabang: <span class="no" id="waKlinik">&mdash;</span></li>
-      </ul>
-      <span class="cek-wa"><b>&#128073; Cara memastikan:</b> cek WhatsApp klinik cabang.
-        Kalau muncul pesan <b>&ldquo;[Rapor Gigi Terkirim] &#9989;&rdquo;</b> untuk pasien ini,
-        berarti rapor sudah terkirim ke orang tua.</span>
-      <span class="kecil">Tidak perlu kirim manual. Kalau notifikasi belum masuk ke WA klinik dalam 5 menit,
-        hubungi <b>BD Support (0851-7108-7351)</b>: <span id="croCek"></span></span>
+      <span class="hd">&#9989; Terkirim otomatis ke WA orang tua &amp; klinik</span>
+      Cek WA klinik: ada pesan <b>&ldquo;Rapor Gigi Terkirim&rdquo;</b> = berhasil.
+      <span class="kecil">Belum masuk dalam 5 menit? <span id="croCek"></span></span>
     </div>
     <button class="btn primary" style="width:100%" id="nextPatient">Isi pasien berikutnya</button>
     <button class="btn ghost" style="width:100%;margin-top:8px" id="resetAll">Mulai dari kosong</button>
@@ -737,8 +729,6 @@ function tampilkanSukses(d){
     const s2=document.createElement("span"); s2.textContent=b; s2.style.wordBreak="break-all";
     row.append(s1,s2); $("#recap").appendChild(row);
   });
-  $("#waOrtu").textContent = d["No HP"] || "\u2014";
-  $("#waKlinik").textContent = (d["Klinik Cabang"]||"\u2014") + (d["nomorklinik"] ? " (0"+String(d["nomorklinik"]).replace(/\D/g,"").replace(/^62/,"")+")" : "");
   var _cro="6285171087351"; // BD Support
   var _croBox=$("#croCek");
   _croBox.innerHTML="";
@@ -752,7 +742,7 @@ function tampilkanSukses(d){
     var _a=document.createElement("a");
     _a.href="https://wa.me/"+_cro+"?text="+encodeURIComponent(_teks);
     _a.target="_blank"; _a.rel="noopener";
-    _a.textContent="chat BD Support di sini";
+    _a.textContent="Chat BD Support";
     _croBox.appendChild(_a);
     _croBox.appendChild(document.createTextNode("."));
   } else {
